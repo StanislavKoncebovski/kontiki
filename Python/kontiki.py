@@ -1,10 +1,44 @@
 from typing import Union
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup as bs
+
+def bibtex_to_dictionary(bibtex: str) -> dict[str, str]:
+    '''
+    Converts BibTeX into dictionary.
+    :param bibtex:
+    :return:
+    '''
+
+    lines = bibtex.strip().split("\n")
+    if len(lines) < 2:
+        return {}
+
+    result = {}
+    for line in lines[1:]:
+        cells = line.split("=")
+
+        if len(cells) == 2:
+            key = cells[0].strip()
+            value = cells[1].strip().replace("{", "").replace("},", "")
+
+            result[key] = value
+
+    return result
 
 class Kontiki:
     '''
     Contains functions to query and retrieve books and articles from a LibGen server.
     '''
+    BASE_URL_BOOK_SEARCH = "http://libgen.rs/search.php"
+    BASE_URL_BOOK_RETRIEVE = "http://libgen.rs/book/index.php"
+    BASE_URL_BOOK_BIBTEX = "http://libgen.rs/book/bibtex.php"
+
+    '''
+    The number of items to return in a book query
+    '''
+    DEFAULT_NUMBER_OF_ITEMS = 25
+
     def query_books(self, tokens: str) -> pd.DataFrame:
         '''
         Carries out a general query for books using common tokens like title and author(s) name(s).
@@ -12,7 +46,36 @@ class Kontiki:
         :return: A pandas dataframe containing the books found. The columns of the dataframe are the fields of the
                  output, such as MD5, Title, Author, etc.
         '''
-        pass
+        request = f"{Kontiki.BASE_URL_BOOK_SEARCH}?req={tokens}&res={Kontiki.DEFAULT_NUMBER_OF_ITEMS}&column=def"
+        response_text = requests.get(request).text
+        soup = bs(response_text, 'html.parser')
+        tables = soup.find_all("table")
+
+        table = tables[2]   # it is always table 2
+
+        # TODO: Just as it was in lab: a short info, do not fetch complete books!
+        table_rows = table.find_all("tr")
+
+        for row in table_rows:
+            # TODO: here extract Publication: fetch td's; skip the 1st one, then : ID, Author(s), Title, Publisher, Year, Pages, Language
+        #
+        # for i in range(len(table_rows)):
+        #     if i == 0:
+        #         continue
+        #
+        #     md5 = ''
+        #     refs = table_rows[i].find_all("a")
+        #     for ref in refs:
+        #         if 'md5' in ref['href']:
+        #             md5 = ref['href'][-32:]
+        #             print(md5)
+        #             break
+        #
+        #     if len(md5) > 0:
+        #         result = self.retrieve_book(md5)
+        #         print(result)
+
+
 
     def query_books_by_isbn(self, isbn: str) -> pd.DataFrame:
         '''
@@ -41,7 +104,17 @@ class Kontiki:
         :return: If found, the dictionary of the book's fields or its BibTeX reference,
                  depending on the output format defined. None, if not found.
         '''
-        pass
+        request = f"{Kontiki.BASE_URL_BOOK_BIBTEX}?md5={md5}"
+        response_text = requests.get(request).text
+        soup = bs(response_text, "html.parser")
+        bibtex = soup.find("textarea").text
+        print(bibtex)
+
+        dic = bibtex_to_dictionary(bibtex)
+        print(dic)
+
+        # TODO: get the BibTex reference via "Link";
+
 
     def query_articles(self, tokens: str) -> pd.DataFrame:
         '''
@@ -63,3 +136,8 @@ class Kontiki:
                  depending on the output format defined. None, if not found.
         '''
         pass
+
+if __name__ == '__main__':
+    kontiki = Kontiki()
+    tokens = "bellman richard numerical"
+    df: pd.DataFrame = kontiki.query_books(tokens)
