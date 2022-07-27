@@ -1,7 +1,8 @@
-from typing import Union
-import pandas as pd
+from typing import Union, Optional
 import requests
 from bs4 import BeautifulSoup as bs
+from publication import Publication
+
 
 def bibtex_to_dictionary(bibtex: str) -> dict[str, str]:
     '''
@@ -39,7 +40,7 @@ class Kontiki:
     '''
     DEFAULT_NUMBER_OF_ITEMS = 25
 
-    def query_books(self, tokens: str) -> pd.DataFrame:
+    def query_books(self, tokens: str) -> list[Publication]:
         '''
         Carries out a general query for books using common tokens like title and author(s) name(s).
         :param tokens: The string containing the tokens. The tokens can be divided by space or comma.
@@ -57,27 +58,9 @@ class Kontiki:
         table_rows = table.find_all("tr")
 
         for row in table_rows:
-            # TODO: here extract Publication: fetch td's; skip the 1st one, then : ID, Author(s), Title, Publisher, Year, Pages, Language
-        #
-        # for i in range(len(table_rows)):
-        #     if i == 0:
-        #         continue
-        #
-        #     md5 = ''
-        #     refs = table_rows[i].find_all("a")
-        #     for ref in refs:
-        #         if 'md5' in ref['href']:
-        #             md5 = ref['href'][-32:]
-        #             print(md5)
-        #             break
-        #
-        #     if len(md5) > 0:
-        #         result = self.retrieve_book(md5)
-        #         print(result)
+    # TODO: here extract Publication: fetch td's; skip the 1st one, then : ID, Author(s), Title, Publisher, Year, Pages, Language
 
-
-
-    def query_books_by_isbn(self, isbn: str) -> pd.DataFrame:
+    def query_books_by_isbn(self, isbn: str) -> Optional[Publication]:
         '''
         Carries out a query for a book by ISBN.
         :param isbn: The ISBN string. Can contain more than one ISBN (e.g. the 10-digit and the 13-digit ISBN), divided
@@ -86,7 +69,7 @@ class Kontiki:
         '''
         pass
 
-    def query_books_by_tags(self, tags: str) -> pd.DataFrame:
+    def query_books_by_tags(self, tags: str) -> list[Publication]:
         '''
         Carries out a query for books by tags.
         :param tags: The tags (e.g. "mathematics, algebra") divided by a space or comma.
@@ -94,7 +77,7 @@ class Kontiki:
         '''
         pass
 
-    def retrieve_book(self, md5: str, format: str = 'dict') -> Union[dict[str, str], str, None]:
+    def retrieve_book(self, md5: str, format: str = 'dict') -> Union[Publication, str, None]:
         '''
         Retrieves a book by its unique MD5 value.
         :param md5: The MD5 code of the book.
@@ -116,7 +99,7 @@ class Kontiki:
         # TODO: get the BibTex reference via "Link";
 
 
-    def query_articles(self, tokens: str) -> pd.DataFrame:
+    def query_articles(self, tokens: str) -> list[Publication]:
         '''
         Carries out a general query for articles using common allowed tokens such as title, author(s), and DOI.
         :param tokens: The string containing the tokens. The tokens can be divided by space or comma.
@@ -140,4 +123,4 @@ class Kontiki:
 if __name__ == '__main__':
     kontiki = Kontiki()
     tokens = "bellman richard numerical"
-    df: pd.DataFrame = kontiki.query_books(tokens)
+    publication = kontiki.query_books(tokens)
