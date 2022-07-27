@@ -1,6 +1,7 @@
 from typing import Union, Optional
 import requests
 from bs4 import BeautifulSoup as bs
+from itertools import islice
 from publication import Publication
 
 
@@ -54,11 +55,25 @@ class Kontiki:
 
         table = tables[2]   # it is always table 2
 
-        # TODO: Just as it was in lab: a short info, do not fetch complete books!
         table_rows = table.find_all("tr")
 
-        for row in table_rows:
-    # TODO: here extract Publication: fetch td's; skip the 1st one, then : ID, Author(s), Title, Publisher, Year, Pages, Language
+        publications = []
+        for table_row in islice(table_rows, 1, None):
+            columns = table_row.find_all("td")
+            publication = Publication('book')
+            publication.foreign_identifiers['libgen_id'] = columns[0].text
+            publication.author = columns[1].text
+            publication.title = columns[2].text
+            publication.publisher = columns[3].text
+            publication.year = columns[4].text
+            publication.pagetotal = columns[5].text
+            publication.language = columns[6].text
+
+            publication.md5 = columns[9].find("a")['href'][-32:]
+
+            publications.append(publication)
+
+        return publications
 
     def query_books_by_isbn(self, isbn: str) -> Optional[Publication]:
         '''
@@ -77,7 +92,7 @@ class Kontiki:
         '''
         pass
 
-    def retrieve_book(self, md5: str, format: str = 'dict') -> Union[Publication, str, None]:
+    def retrieve_book(self, md5: str, format: str = 'bibtex') -> Union[Publication, str, None]:
         '''
         Retrieves a book by its unique MD5 value.
         :param md5: The MD5 code of the book.
@@ -91,13 +106,13 @@ class Kontiki:
         response_text = requests.get(request).text
         soup = bs(response_text, "html.parser")
         bibtex = soup.find("textarea").text
-        print(bibtex)
 
-        dic = bibtex_to_dictionary(bibtex)
-        print(dic)
-
-        # TODO: get the BibTex reference via "Link";
-
+        if format == 'bibtex':
+            return bibtex
+        elif format == 'instance':
+            return Publication.from_bibtex(bibtex)
+        else:
+            return None
 
     def query_articles(self, tokens: str) -> list[Publication]:
         '''
@@ -123,4 +138,15 @@ class Kontiki:
 if __name__ == '__main__':
     kontiki = Kontiki()
     tokens = "bellman richard numerical"
-    publication = kontiki.query_books(tokens)
+    publications = kontiki.query_books(tokens)
+
+    for p in publications:
+        print(p.to_bibtex())
+
+    print("===================")
+
+    md5 = "6AA7F5356BEA02FAC07BC63132B98F00"
+
+    publication = kontiki.retrieve_book(md5)
+
+    print(publication)

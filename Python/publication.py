@@ -19,8 +19,8 @@ def create_bibtex_string(publication: Publication, key: str) -> Optional[str]:
 
 
 class Publication:
-    def __init__(self):
-        self.publication_type = ""  # supported are: 'book' or 'article'
+    def __init__(self, publication_type: str = 'Misc'):
+        self.publication_type = publication_type  # presently supported are: 'book' or 'article'
         self.id = 0                 # Kontiki ID
         self.md5 = ""               # LibGen's MD5. the unique identifier of a publication on LibGen
         self.title = ""
@@ -55,7 +55,11 @@ class Publication:
 
 
     def to_bibtex(self) -> str:
-        result = f"@book{{book_{self.id},\n"  # TODO: generate Id from the first author's name and year; otherwise from title or automatically
+        '''
+        Converts a publication to BibTeX reference.
+        :return: The BibTeX reference of the publication.
+        '''
+        result = f"@book{{{self.publication_type}_{self.id},\n"  # TODO: generate Id from the first author's name and year; otherwise from title or automatically
 
         for key, value in self.__dict__.items():
             line = create_bibtex_string(self, key)
@@ -67,11 +71,31 @@ class Publication:
         return result
 
     @classmethod
-    def from_bibtex(clsbibtex: str) -> Publication:
-        pass
+    def from_bibtex(cls, bibtex: str) -> Optional[Publication]:
+        '''
+        Creates an instance of Publication from its BibTeX reference.
+        :param bibtex: The BibTeX reference.
+        :return: The instance of Publication created, if successful, otherwise None.
+        '''
+        lines = bibtex.strip().split("\n")
+
+        if len(lines) < 3:
+            return None
+
+        publication = Publication()
+
+        for line in lines[1:]:
+            cells = line.split("=")
+
+            if len(cells) == 2:
+                key = cells[0].strip()
+                value = cells[1].strip().replace("{", "").replace("},", "")
+                setattr(publication, key, value)
+
+        return publication
 
 if __name__ == '__main__':
-    publication = Publication()
+    publication = Publication('book')
     publication.id = 1001
     publication.title = "Elephant breeding in Canada"
     publication.author = "Arborio, Don"
@@ -87,3 +111,7 @@ if __name__ == '__main__':
     bibtex = publication.to_bibtex()
 
     print(bibtex)
+
+    pub2 = Publication.from_bibtex(bibtex)
+
+    print(pub2)
