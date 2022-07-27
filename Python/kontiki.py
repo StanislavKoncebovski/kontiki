@@ -39,14 +39,13 @@ class Kontiki:
     '''
     The number of items to return in a book query
     '''
-    DEFAULT_NUMBER_OF_ITEMS = 25
+    DEFAULT_NUMBER_OF_ITEMS = 250
 
     def query_books(self, tokens: str) -> list[Publication]:
         '''
         Carries out a general query for books using common tokens like title and author(s) name(s).
         :param tokens: The string containing the tokens. The tokens can be divided by space or comma.
-        :return: A pandas dataframe containing the books found. The columns of the dataframe are the fields of the
-                 output, such as MD5, Title, Author, etc.
+        :return: A list containing the books found, otherwise an empty set.
         '''
         request = f"{Kontiki.BASE_URL_BOOK_SEARCH}?req={tokens}&res={Kontiki.DEFAULT_NUMBER_OF_ITEMS}&column=def"
         response_text = requests.get(request).text
@@ -80,27 +79,75 @@ class Kontiki:
         Carries out a query for a book by ISBN.
         :param isbn: The ISBN string. Can contain more than one ISBN (e.g. the 10-digit and the 13-digit ISBN), divided
                      by a space or comma.
-        :return: A pandas dataframe with either one row (if the book was found) or empty (no book found).
+        :return: The publication found, if successful, otherwise None.
         '''
-        pass
+        request = f"{Kontiki.BASE_URL_BOOK_SEARCH}?req={isbn}&res={Kontiki.DEFAULT_NUMBER_OF_ITEMS}&column=identifier"
+
+        response_text = requests.get(request).text
+        soup = bs(response_text, 'html.parser')
+        tables = soup.find_all("table")
+
+        table = tables[2]  # it is always table 2
+
+        table_rows = table.find_all("tr")
+        columns = table_rows[1].find_all("td")
+
+        publication = Publication('book')
+        publication.foreign_identifiers['libgen_id'] = columns[0].text
+        publication.author = columns[1].text
+        publication.title = columns[2].text
+        publication.publisher = columns[3].text
+        publication.year = columns[4].text
+        publication.pagetotal = columns[5].text
+        publication.language = columns[6].text
+
+        publication.md5 = columns[9].find("a")['href'][-32:]
+
+        return publication
+
+
 
     def query_books_by_tags(self, tags: str) -> list[Publication]:
         '''
         Carries out a query for books by tags.
         :param tags: The tags (e.g. "mathematics, algebra") divided by a space or comma.
-        :return:  A pandas dataframe containing the books found.
+        :return: A list containing the books found, otherwise an empty set.
         '''
-        pass
+        request = f"{Kontiki.BASE_URL_BOOK_SEARCH}?req={tags}&res={Kontiki.DEFAULT_NUMBER_OF_ITEMS}&column=tags"
+
+        response_text = requests.get(request).text
+        soup = bs(response_text, 'html.parser')
+        tables = soup.find_all("table")
+
+        table = tables[2]  # it is always table 2
+
+        table_rows = table.find_all("tr")
+
+        publications = []
+        for table_row in islice(table_rows, 1, None):
+            columns = table_row.find_all("td")
+            publication = Publication('book')
+            publication.foreign_identifiers['libgen_id'] = columns[0].text
+            publication.author = columns[1].text
+            publication.title = columns[2].text
+            publication.publisher = columns[3].text
+            publication.year = columns[4].text
+            publication.pagetotal = columns[5].text
+            publication.language = columns[6].text
+
+            publication.md5 = columns[9].find("a")['href'][-32:]
+
+            publications.append(publication)
+
+        return publications
 
     def retrieve_book(self, md5: str, format: str = 'bibtex') -> Union[Publication, str, None]:
         '''
         Retrieves a book by its unique MD5 value.
         :param md5: The MD5 code of the book.
-        :param format: Defines the format of the output. If it is 'dict' (default) the result is a dictionary containing
-                       the fields, such as MD5, Title, Author, etc.
-                       If it is 'bibtex' the result is a BibTeX reference of the book.
-        :return: If found, the dictionary of the book's fields or its BibTeX reference,
-                 depending on the output format defined. None, if not found.
+        :param format: Defines the format of the output. If it is 'bibtex' (default) the result is the BibTeX reference of the book,
+        otherwise, if it is 'instance', an instance of Publication; otherwise, None.
+        :return: If found, the result in the format defined, otherwise, None.
         '''
         request = f"{Kontiki.BASE_URL_BOOK_BIBTEX}?md5={md5}"
         response_text = requests.get(request).text
@@ -137,16 +184,23 @@ class Kontiki:
 
 if __name__ == '__main__':
     kontiki = Kontiki()
-    tokens = "bellman richard numerical"
-    publications = kontiki.query_books(tokens)
+    tags = "matrix numerical"
+    publications = kontiki.query_books_by_tags(tags)
 
-    for p in publications:
-        print(p.to_bibtex())
-
-    print("===================")
-
-    md5 = "6AA7F5356BEA02FAC07BC63132B98F00"
-
-    publication = kontiki.retrieve_book(md5)
-
-    print(publication)
+    print(len(publications))
+    # isbn = "9780898713992"
+    # publication = kontiki.query_books_by_isbn(isbn)
+    # print(publication.to_bibtex())
+    # tokens = "bellman richard numerical"
+    # publications = kontiki.query_books(tokens)
+    #
+    # for p in publications:
+    #     print(p.to_bibtex())
+    #
+    # print("===================")
+    #
+    # md5 = "6AA7F5356BEA02FAC07BC63132B98F00"
+    #
+    # publication = kontiki.retrieve_book(md5)
+    #
+    # print(publication)

@@ -17,6 +17,7 @@ def create_bibtex_string(publication: Publication, key: str) -> Optional[str]:
     else:
         return None
 
+FIELDS_RESTRICTED = ['md5', 'publication_type']
 
 class Publication:
     def __init__(self, publication_type: str = 'Misc'):
@@ -62,11 +63,14 @@ class Publication:
         result = f"@book{{{self.publication_type}_{self.id},\n"  # TODO: generate Id from the first author's name and year; otherwise from title or automatically
 
         for key, value in self.__dict__.items():
+            if key in FIELDS_RESTRICTED:
+                continue
+
             line = create_bibtex_string(self, key)
             if line is not None:
                 result += line
 
-        result += "}}"
+        result += "}"
 
         return result
 
