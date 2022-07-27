@@ -1,12 +1,21 @@
+from typing import Optional
+
+
 class Publication:
     pass
 
-def create_bibtex_string(publication: Publication, key: str) -> str:
-    x = getattr(publication, key)
-    if x is not None:
-        return f"\t{key} =\t\t{{{x}}},\n"
+def create_bibtex_string(publication: Publication, key: str) -> Optional[str]:
+    value = getattr(publication, key)
+    if value is None:
+        return None
+    elif type(value) is str:
+        if len(value) > 0:
+            delim = "\t" * (3 - ((4 + len(key)) // 5))
+            return f"\t{key} ={delim}{{{value}}},\n"
+        else:
+            return None
     else:
-        return "***"
+        return None
 
 
 class Publication:
@@ -46,15 +55,12 @@ class Publication:
 
 
     def to_bibtex(self) -> str:
-        result = f"@book{{book_{self.id},\n"                    # TODO: generate Id from the first author's name and year; otherwise from title or automatically
-        result += f"\ttitle =\t\t{{{self.title}}},\n"
-        result += f"\tauthor =\t{{{self.author}}},\n"
-        result += f"\tpublisher =\t{{{self.publisher}}},\n"
-        result += f"\tisbn =\t\t{{{self.isbn}}},\n"
-        result += f"\tyear =\t\t{{{self.year}}},\n"
-        result += f"\tseries =\t{{{self.series}}},\n"
-        result += f"\tedition =\t{{{self.edition}}},\n"
-        result += f"\tvolume =\t{{{self.volume}}}\n"
+        result = f"@book{{book_{self.id},\n"  # TODO: generate Id from the first author's name and year; otherwise from title or automatically
+
+        for key, value in self.__dict__.items():
+            line = create_bibtex_string(self, key)
+            if line is not None:
+                result += line
 
         result += "}}"
 
@@ -63,20 +69,6 @@ class Publication:
     @classmethod
     def from_bibtex(clsbibtex: str) -> Publication:
         pass
-
-'''
-@book{book:71684,
-   title =     {Introduction to matrix analysis},
-   author =    {Richard Bellman},
-   publisher = {Society for Industrial and Applied Mathematics},
-   isbn =      {9780898713992,0898713994},
-   year =      {1987},
-   series =    {Classics in applied mathematics 19},
-   edition =   {2nd ed},
-   volume =    {},
-   url =       {http://gen.lib.rus.ec/book/index.php?md5=81c8666b0e361c5cd1203f4c4d35fb2a}
-}
-'''
 
 if __name__ == '__main__':
     publication = Publication()
@@ -89,7 +81,7 @@ if __name__ == '__main__':
     publication.edition = "XIII"
     publication.volume = "5"
     publication.publisher = "Microsoft Press"
-    publication.city = "Hongkong"
+    publication.address = "Hongkong"
 
     y = create_bibtex_string(publication, 'title')
     bibtex = publication.to_bibtex()
