@@ -44,7 +44,7 @@ class Kontiki:
     BASE_URL_BOOK_SEARCH = "http://libgen.rs/search.php"
     BASE_URL_BOOK_RETRIEVE = "http://libgen.rs/book/index.php"
     BASE_URL_BOOK_BIBTEX = "http://libgen.rs/book/bibtex.php"
-    BASE_URL_ARTICLE_SEARCH = "http://libgen.rs/scimag/"
+    BASE_URL_ARTICLE_SEARCH = "http://libgen.rs/scimag"
 
     '''
     The number of items to return in a book query
@@ -238,7 +238,7 @@ class Kontiki:
         #
         # return publications
 
-    def retrieve_article(self, doi: str, format: str = 'dict') -> Union[dict[str, str], str, None]:
+    def retrieve_article(self, doi: str, format: str = 'dict') -> Union[Publication, str, None]:
         '''
         Retrieves an article by its DOI value.
         :param doi: The DOI value.
@@ -248,16 +248,34 @@ class Kontiki:
         :return: If found, the dictionary of the article's fields or its BibTeX reference,
                  depending on the output format defined. None, if not found.
         '''
-        pass
+        # http://libgen.rs/scimag/10.1006%2Fjath.1994.1061/bibtex
+        request = f"{Kontiki.BASE_URL_ARTICLE_SEARCH}/{doi}/bibtex"
+        bibtex = requests.get(request).text
+
+        if format == 'bibtex':
+            return bibtex
+        elif format == 'instance':
+            return Publication.from_bibtex(bibtex)
+        else:
+            return None
 
 if __name__ == '__main__':
     kontiki = Kontiki()
-    tokens = "bellman+richard+matrix"
-    publications = kontiki.query_articles(tokens)
+
+    doi = "10.1006%2Fjath.1994.1061"
+    publication = kontiki.retrieve_article(doi, 'bibtex')
+    print(publication)
+
+    p2 = kontiki.retrieve_article(doi, 'instance')
+    print(p2.to_bibtex())
 
 
-    for p in publications:
-        print(p.to_bibtex())
+    # tokens = "bellman+richard+matrix"
+    # publications = kontiki.query_articles(tokens)
+    #
+    #
+    # for p in publications:
+    #     print(p.to_bibtex())
 
     # isbn = "9780898713992"
     # publication = kontiki.query_books_by_isbn(isbn)
