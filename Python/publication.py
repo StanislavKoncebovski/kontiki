@@ -36,6 +36,7 @@ class Publication:
         self.publisher = ""
         self.address  = ""          # A.k.a. location, city
         self.pagetotal = ""         # For books
+        self.journal = ""           # For articles
         self.pages = ""             # For articles
         self.issue = ""
         self.isbn = ""

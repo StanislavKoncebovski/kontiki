@@ -2,6 +2,7 @@ from typing import Union, Optional
 import requests
 from bs4 import BeautifulSoup as bs
 from itertools import islice
+import re
 from publication import Publication
 
 
@@ -28,6 +29,14 @@ def bibtex_to_dictionary(bibtex: str) -> dict[str, str]:
 
     return result
 
+def extract_article_data(source: str):
+    result = re.findall(r"(\d+)", source)
+
+    if len(result) == 3:
+        return result
+    else:
+        return None
+
 class Kontiki:
     '''
     Contains functions to query and retrieve books and articles from a LibGen server.
@@ -35,6 +44,7 @@ class Kontiki:
     BASE_URL_BOOK_SEARCH = "http://libgen.rs/search.php"
     BASE_URL_BOOK_RETRIEVE = "http://libgen.rs/book/index.php"
     BASE_URL_BOOK_BIBTEX = "http://libgen.rs/book/bibtex.php"
+    BASE_URL_ARTICLE_SEARCH = "http://libgen.rs/scimag/"
 
     '''
     The number of items to return in a book query
@@ -168,7 +178,65 @@ class Kontiki:
         :return: A pandas dataframe containing the articles found. The columns of the dataframe are the fields of the
                  output, such as MD5, Title, Author, DOI, etc.
         '''
-        pass
+        request = f"{Kontiki.BASE_URL_ARTICLE_SEARCH}?q={tokens}"
+        response_text = requests.get(request).text
+
+        soup = bs(response_text, 'html.parser')
+
+        table = soup.find("table", {"class": "catalog"})
+
+        table_rows = table.find_all("tr")
+
+        publications = []
+        for table_row in islice(table_rows, 1, None):
+            publication = Publication('article')
+
+            columns = table_row.find_all("td")
+            publication.author = columns[0].text
+            paragraphs = columns[1].find_all("p")
+
+            if len(paragraphs) == 2:
+                publication.title = paragraphs[0].text
+                publication.doi = paragraphs[1].text.replace("DOI:", "").strip()
+
+            paragraphs = columns[2].find_all("p")
+            if len(paragraphs) == 2:
+                publication.journal = paragraphs[0].find("a").text
+                article_data = extract_article_data(paragraphs[1].text)
+
+                if article_data is not None:
+                    publication.volume = article_data[0]
+                    publication.issue = article_data[1]
+                    publication.year = article_data[2]
+
+            publications.append(publication)
+
+        return publications
+
+
+        # tables = soup.find_all("table")
+        #
+        # table = tables[2]  # it is always table 2
+        #
+        # table_rows = table.find_all("tr")
+        #
+        # publications = []
+        # for table_row in islice(table_rows, 1, None):
+        #     columns = table_row.find_all("td")
+        #     publication = Publication('book')
+        #     publication.foreign_identifiers['libgen_id'] = columns[0].text
+        #     publication.author = columns[1].text
+        #     publication.title = columns[2].text
+        #     publication.publisher = columns[3].text
+        #     publication.year = columns[4].text
+        #     publication.pagetotal = columns[5].text
+        #     publication.language = columns[6].text
+        #
+        #     publication.md5 = columns[9].find("a")['href'][-32:]
+        #
+        #     publications.append(publication)
+        #
+        # return publications
 
     def retrieve_article(self, doi: str, format: str = 'dict') -> Union[dict[str, str], str, None]:
         '''
@@ -184,10 +252,13 @@ class Kontiki:
 
 if __name__ == '__main__':
     kontiki = Kontiki()
-    tags = "matrix numerical"
-    publications = kontiki.query_books_by_tags(tags)
+    tokens = "bellman+richard+matrix"
+    publications = kontiki.query_articles(tokens)
 
-    print(len(publications))
+
+    for p in publications:
+        print(p.to_bibtex())
+
     # isbn = "9780898713992"
     # publication = kontiki.query_books_by_isbn(isbn)
     # print(publication.to_bibtex())
