@@ -213,31 +213,6 @@ class Kontiki:
 
         return publications
 
-
-        # tables = soup.find_all("table")
-        #
-        # table = tables[2]  # it is always table 2
-        #
-        # table_rows = table.find_all("tr")
-        #
-        # publications = []
-        # for table_row in islice(table_rows, 1, None):
-        #     columns = table_row.find_all("td")
-        #     publication = Publication('book')
-        #     publication.foreign_identifiers['libgen_id'] = columns[0].text
-        #     publication.author = columns[1].text
-        #     publication.title = columns[2].text
-        #     publication.publisher = columns[3].text
-        #     publication.year = columns[4].text
-        #     publication.pagetotal = columns[5].text
-        #     publication.language = columns[6].text
-        #
-        #     publication.md5 = columns[9].find("a")['href'][-32:]
-        #
-        #     publications.append(publication)
-        #
-        # return publications
-
     def retrieve_article(self, doi: str, format: str = 'dict') -> Union[Publication, str, None]:
         '''
         Retrieves an article by its DOI value.

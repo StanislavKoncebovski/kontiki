@@ -43,12 +43,16 @@ namespace Kontiki.UnitTests
 			Publication p2 = Publication.FromBibTeX(bibtex);
 
 			var kontiki = new HapKontiki();
-			var books = kontiki.QueryBooks("bellman+richard");
+			var books = kontiki.QueryBooks("9780898713992", QueryColumn.ISBN);
 
 			foreach (var book in books)
 			{
 				Console.WriteLine(book.ToBibTeX());
 			}
+
+			string md5 = "16d8aea90ab88be35c6c8cb7b9335991";
+
+			Publication p3 = kontiki.RetrieveBook(md5);
 
 			Console.ReadLine();
 		}

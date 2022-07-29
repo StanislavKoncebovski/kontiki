@@ -21,6 +21,13 @@ namespace Kontiki
 		List<Publication> QueryBooks(string tokens, QueryColumn queryColumn = QueryColumn.Default);
 
 		/// <summary>
+		/// Retrieves a book's BibTeX reference by its unique MD5 value.
+		/// </summary>
+		/// <param name="md5">The MD5 code of the book.</param>
+		/// <returns>If found, the book's BibTeX reference value, otherwise null</returns>
+		string RetrieveBookBibTex(string md5);
+
+		/// <summary>
 		/// Retrieves a book by its unique MD5 value.
 		/// </summary>
 		/// <param name="md5">The MD5 code of the book.</param>

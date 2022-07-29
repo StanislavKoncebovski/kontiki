@@ -23,20 +23,50 @@ namespace Kontiki
 		/// </summary>
 		#region Static members
 		private static string BASE_URL_BOOK_SEARCH = "http://libgen.rs/search.php";
+		private static string BASE_URL_BOOK_RETRIEVE = "http://libgen.rs/book/index.php";
+		private static string BASE_URL_BOOK_BIBTEX = "http://libgen.rs/book/bibtex.php";
 		private static int DEFAULT_NUMBER_OF_ITEMS = 25;
 		#endregion
 
 		#region IKontiki
-		/// <param name="tokens"></param>
-		/// <param name="queryColumn"></param>
-		/// <returns></returns>
+		/// <summary>
+		/// Carries out a general query for books using common tokens like title and author(s) name(s).
+		/// </summary>
+		/// <param name="tokens">The string containing the tokens. The tokens can be divided by space or comma.</param>
+		/// <param name="queryColumn">The column to query by.</param>
+		/// <returns>A list containing the books found.</returns>
 		public List<Publication> QueryBooks(string tokens, QueryColumn queryColumn = QueryColumn.Default)
 		{
-			string requestString = $"{BASE_URL_BOOK_SEARCH}?req={tokens}&res={DEFAULT_NUMBER_OF_ITEMS}&column=def";
-			
-			string responseString = GetResponse(requestString);
+			string column			= "def";
 
-			HtmlDocument doc = new HtmlDocument();
+			switch (queryColumn)
+			{
+				case QueryColumn.Author:
+					column = "author";
+					break;
+
+				case QueryColumn.Title:
+					column = "title";
+					break;
+
+				case QueryColumn.ISBN:
+					column = "identifier";
+					break;
+
+				case QueryColumn.Tags:
+					column = "tags";
+					break;
+
+				case QueryColumn.Default:
+				default:
+					break;
+			}
+
+			string requestString	= $"{BASE_URL_BOOK_SEARCH}?req={tokens}&res={DEFAULT_NUMBER_OF_ITEMS}&column={column}";
+			
+			string responseString	= GetResponse(requestString);
+
+			HtmlDocument doc		= new HtmlDocument();
 			doc.LoadHtml(responseString);
 
 			HtmlNode[] tables = doc.DocumentNode.SelectNodes("//table").ToArray();
@@ -91,9 +121,48 @@ namespace Kontiki
 			return publications;
 		}
 
+		/// <summary>
+		/// Retrieves a book's BibTeX reference by its unique MD5 value.
+		/// </summary>
+		/// <param name="md5">The MD5 code of the book.</param>
+		/// <returns>If found, the book's BibTeX reference value, otherwise null</returns>
+		public string RetrieveBookBibTex(string md5)
+		{
+			try
+			{
+				string requestString	= $"{BASE_URL_BOOK_BIBTEX}?md5={md5}";
+				string responseString	= GetResponse(requestString);
+				HtmlDocument doc		= new HtmlDocument();
+				doc.LoadHtml(responseString);
+
+				string bibtex			= doc.DocumentNode.SelectSingleNode("//textarea").InnerText;
+				return bibtex.Trim();
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
 		public Publication RetrieveBook(string md5)
 		{
-			throw new NotImplementedException();
+			string bibtex = this.RetrieveBookBibTex(md5);
+
+			if (!String.IsNullOrEmpty(bibtex))
+			{
+				try
+				{
+					return Publication.FromBibTeX(bibtex);
+				}
+				catch
+				{
+					return null;
+				}
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		public List<Publication> QueryArticles(string tokens)

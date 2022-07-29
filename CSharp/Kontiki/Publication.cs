@@ -195,9 +195,10 @@ namespace Kontiki
 
 				if (cells.Length == 2)
 				{
-					string key = cells[0].Trim();
-					string value = cells[1].Trim().Replace("{", "").Replace("},", "");
-					PropertyInfo property = typeof(Publication).GetProperty(key);
+					string key				= cells[0].Trim();
+					string value			= cells[1].Trim().Replace("{", "").Replace("},", "");
+					string keyCap			= Capitalize(key);
+					PropertyInfo property	= typeof(Publication).GetProperty(keyCap);
 					property.SetValue(publication, value);
 				}
 			}
@@ -215,6 +216,13 @@ namespace Kontiki
 		public static Publication FromXElement(XElement x)
 		{
 			throw new NotImplementedException();
+		}
+		#endregion
+
+		#region Private auxiliary
+		private static string Capitalize(string source)
+		{
+			return source.Substring(0, 1).ToUpper() + source.Substring(1);
 		}
 		#endregion
 	}
