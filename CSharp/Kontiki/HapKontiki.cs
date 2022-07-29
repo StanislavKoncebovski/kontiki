@@ -23,11 +23,10 @@ namespace Kontiki
 		/// Implementation using HtmlAgilityPack
 		/// </summary>
 		#region Static members
-		private static string BASE_URL_BOOK_SEARCH = "http://libgen.rs/search.php";
-		private static string BASE_URL_BOOK_RETRIEVE = "http://libgen.rs/book/index.php";
-		private static string BASE_URL_BOOK_BIBTEX = "http://libgen.rs/book/bibtex.php";
-		private static string BASE_URL_ARTICLE_SEARCH = "http://libgen.rs/scimag";
-		private static int DEFAULT_NUMBER_OF_ITEMS = 25;
+		private static string	BASE_URL_BOOK_SEARCH	= "http://libgen.rs/search.php";
+		private static string	BASE_URL_BOOK_BIBTEX	= "http://libgen.rs/book/bibtex.php";
+		private static string	BASE_URL_ARTICLE_SEARCH	= "http://libgen.rs/scimag";
+		private static int		DEFAULT_NUMBER_OF_ITEMS = 25;
 		#endregion
 
 		#region IKontiki
@@ -172,10 +171,14 @@ namespace Kontiki
 			}
 		}
 
+		/// <summary>
+		/// Carries out a general query for articles using common allowed tokens such as title, author(s), and DOI.
+		/// </summary>
+		/// <param name="tokens">The string containing the tokens. The tokens can be divided by space or comma.</param>
+		/// <returns>A list containing the articles found.</returns>
 		public List<Publication> QueryArticles(string tokens)
 		{
-			string requestString = $"{BASE_URL_ARTICLE_SEARCH}/?q={tokens}";
-
+			string requestString	= $"{BASE_URL_ARTICLE_SEARCH}/?q={tokens}";
 			string responseString	= GetResponse(requestString);
 			HtmlDocument doc		= new HtmlDocument();
 			doc.LoadHtml(responseString);
@@ -228,9 +231,43 @@ namespace Kontiki
 			return publications;
 		}
 
+		/// <summary>
+		/// Retrieves an article's BibTeX referenece by its DOI value.
+		/// </summary>
+		/// <param name="doi">The DOI value.</param>
+		/// <returns>If found, the article's BibTeX reference value, otherwise null.</returns>
+		public string RetrieveArticleBibTex(string doi)
+		{
+			string requestString	= $"{BASE_URL_ARTICLE_SEARCH}/{doi}/bibtex";
+			string responseString	= GetResponse(requestString);
+			
+			return responseString;
+		}
+
+		/// <summary>
+		/// Retrieves an article by its DOI value.
+		/// </summary>
+		/// <param name="doi">The DOI value.</param>
+		/// <returns>If found, the publication value, otherwise null.</returns>
 		public Publication RetrieveArticle(string doi)
 		{
-			throw new NotImplementedException();
+			string bibtex = this.RetrieveArticleBibTex(doi);
+
+			if (!String.IsNullOrEmpty(bibtex))
+			{
+				try
+				{
+					return Publication.FromBibTeX(bibtex);
+				}
+				catch
+				{
+					return null;
+				}
+			}
+			else
+			{
+				return null;
+			}
 		}
 		#endregion
 

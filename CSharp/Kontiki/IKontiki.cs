@@ -42,10 +42,17 @@ namespace Kontiki
 		List<Publication> QueryArticles(string tokens);
 
 		/// <summary>
+		/// Retrieves an article's BibTeX referenece by its DOI value.
+		/// </summary>
+		/// <param name="doi">The DOI value.</param>
+		/// <returns>If found, the article's BibTeX reference value, otherwise null.</returns>
+		string RetrieveArticleBibTex(string doi);
+
+		/// <summary>
 		/// Retrieves an article by its DOI value.
 		/// </summary>
 		/// <param name="doi">The DOI value.</param>
-		/// <returns>If found, the publication value, otherwise null</returns>
+		/// <returns>If found, the publication value, otherwise null.</returns>
 		Publication RetrieveArticle(string doi);
 	}
 }

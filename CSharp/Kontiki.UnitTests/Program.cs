@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/***********************************************************************************
+* File:         Program.cs                                                         *
+* Contents:     Class Program                                                      *
+* Author:       Stanislav Koncebovski (stanislav@pikkatech.eu)                     *
+* Date:         2022-07-29 20:37                                                   *
+* Version:      1.0                                                                *
+* Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
+***********************************************************************************/
+using System;
 
 namespace Kontiki.UnitTests
 {
@@ -65,6 +69,16 @@ namespace Kontiki.UnitTests
 			{
 				Console.WriteLine(article.ToBibTeX());
 			}
+
+
+			string doi = "10.1006%2Fjath.1994.1061";
+
+			bibtex = kontiki.RetrieveArticleBibTex(doi);
+
+			Console.WriteLine(bibtex);
+
+
+			Publication p4 = kontiki.RetrieveArticle(doi);
 
 			Console.ReadLine();
 		}
