@@ -9,7 +9,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Microsoft.SqlServer.Server;
 
 namespace Kontiki
 {
@@ -18,6 +22,10 @@ namespace Kontiki
 	/// </summary>
 	public class Publication
 	{
+		#region Private ststic members
+		private static List<string>	_fieldsRestricted = new List<string>{"Md5"};
+		#endregion
+
 		#region Properties
 		public PublicationType				PublicationType		{get;set;}
 		/// <summary>
@@ -93,12 +101,108 @@ namespace Kontiki
 		#region BiBTeX
 		public string ToBibTeX()
 		{
-			throw new NotImplementedException();
+			string publicationType = "";
+
+			switch (this.PublicationType)
+			{
+				case PublicationType.Book:
+					publicationType = "book";
+					break;
+
+				case PublicationType.Article:
+					publicationType = "article";
+					break;
+
+				case PublicationType.Unknown:
+				default:
+					publicationType = "misc";
+					break;
+			}
+
+			string result = $"@{publicationType}{{{this.PublicationType.ToString().ToLower()}_{this.Id},\n";
+
+			PropertyInfo[] properties = typeof(Publication).GetProperties();
+
+			foreach (PropertyInfo property in properties)
+			{
+				string key = property.Name;
+
+				if (_fieldsRestricted.Contains(key))
+				{
+					continue;
+				}
+
+				object value = property.GetValue(this);
+
+				if (value == null)
+				{
+					continue;
+				}
+
+				if (value is string)
+				{
+					string valueString = (string)value;
+
+					if (valueString.Length == 0)
+					{
+						continue;
+					}
+
+					string delim = new string('\t',  (3 - ((4 + key.Length) / 5)));
+
+					string line = $"\t{key} ={delim}{{{value}}},\n";
+
+					result += line;
+				}
+			}
+
+			result += "}";
+
+			return result;
 		}
 
 		public static Publication FromBibTeX(string bibtex)
 		{
-			throw new NotImplementedException();
+			string[] lines = bibtex.Trim().Split('\n');
+
+			if (lines.Length < 3)
+			{
+				return null;
+			}
+
+			Publication publication = new Publication();
+
+			Regex rxPublicationType = new Regex(@"@\s*(?'type'\w+)\s*{");
+			string publicationType = rxPublicationType.Match(lines[0]).Groups["type"].Value;
+
+			switch (publicationType.ToLower())
+			{
+				case "book":
+					publication.PublicationType	= PublicationType.Book;
+					break;
+
+				case "article":
+					publication.PublicationType = PublicationType.Article;
+					break;
+
+				default:
+					break;
+			}
+
+			foreach (string line in lines.Skip(1))
+			{
+				string[] cells = line.Split('=');
+
+				if (cells.Length == 2)
+				{
+					string key = cells[0].Trim();
+					string value = cells[1].Trim().Replace("{", "").Replace("},", "");
+					PropertyInfo property = typeof(Publication).GetProperty(key);
+					property.SetValue(publication, value);
+				}
+			}
+
+			return publication;
 		}
 		#endregion
 
