@@ -11,23 +11,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 namespace Kontiki
 {
 	public class HapKontiki : IKontiki
 	{
+		/// <summary>
+		/// Implementation using HtmlAgilityPack
+		/// </summary>
 		#region Static members
 		private static string BASE_URL_BOOK_SEARCH = "http://libgen.rs/search.php";
 		private static int DEFAULT_NUMBER_OF_ITEMS = 25;
 		#endregion
 
-		/// <summary>
-		/// Implementation using HtmlAgilityPack
-		/// </summary>
+		#region IKontiki
 		/// <param name="tokens"></param>
 		/// <param name="queryColumn"></param>
 		/// <returns></returns>
@@ -82,7 +81,7 @@ namespace Kontiki
 				publication.Pagetotal	= columns[5].InnerText;
 				publication.Language	= columns[6].InnerText;
 
-				string md5				= GetMd5(columns[9]);
+				string md5				= ExtractMd5(columns[9]);
 
 				publication.Md5			= md5;
 
@@ -106,11 +105,17 @@ namespace Kontiki
 		{
 			throw new NotImplementedException();
 		}
+		#endregion
 
 		#region Private Auxiliary
-		private static string GetResponse(string url)
+		/// <summary>
+		/// Gets a HTML respose to a request.
+		/// </summary>
+		/// <param name="requestString">The request string (URL).</param>
+		/// <returns>The request string, if successful, otherwise null.</returns>
+		private static string GetResponse(string requestString)
 		{
-			WebRequest request = WebRequest.Create(url);
+			WebRequest request = WebRequest.Create(requestString);
 
 			try
 			{
@@ -129,11 +134,16 @@ namespace Kontiki
 			}
 		}
 
-		private static string GetMd5(HtmlNode column)
+		/// <summary>
+		/// Extracts MD5 out of a LibGen HTML node.
+		/// </summary>
+		/// <param name="node">The node to extract from.</param>
+		/// <returns>The MD5 value, if successful, otherwise null.</returns>
+		private static string ExtractMd5(HtmlNode node)
 		{
 			try
 			{
-				HtmlNode a		= column.SelectSingleNode("a");
+				HtmlNode a		= node.SelectSingleNode("a");
 				string value	= a.Attributes[0].Value;
 				return value.Substring(value.Length - 32, 32);
 			}
@@ -143,6 +153,12 @@ namespace Kontiki
 			}
 		}
 
+		/// <summary>
+		/// Gets a safe string value of a node's child node.
+		/// </summary>
+		/// <param name="node">The base node.</param>
+		/// <param name="index">The index of the child node.</param>
+		/// <returns>The inner HTML of the child node, if it exists, otherwise an empty string.</returns>
 		private static string GetSafeNodeValue(HtmlNode node, int index)
 		{
 			try
