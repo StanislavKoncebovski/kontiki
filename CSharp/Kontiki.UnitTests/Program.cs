@@ -54,6 +54,18 @@ namespace Kontiki.UnitTests
 
 			Publication p3 = kontiki.RetrieveBook(md5);
 
+
+			string tokens = "Bellman+Matrix";
+
+			var articles = kontiki.QueryArticles(tokens);
+
+			Console.WriteLine("==== ARTICLES ====\n");
+
+			foreach (var article in articles)
+			{
+				Console.WriteLine(article.ToBibTeX());
+			}
+
 			Console.ReadLine();
 		}
 	}

@@ -12,8 +12,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
-
+	
 namespace Kontiki
 {
 	public class HapKontiki : IKontiki
@@ -25,6 +26,7 @@ namespace Kontiki
 		private static string BASE_URL_BOOK_SEARCH = "http://libgen.rs/search.php";
 		private static string BASE_URL_BOOK_RETRIEVE = "http://libgen.rs/book/index.php";
 		private static string BASE_URL_BOOK_BIBTEX = "http://libgen.rs/book/bibtex.php";
+		private static string BASE_URL_ARTICLE_SEARCH = "http://libgen.rs/scimag";
 		private static int DEFAULT_NUMBER_OF_ITEMS = 25;
 		#endregion
 
@@ -144,6 +146,11 @@ namespace Kontiki
 			}
 		}
 
+		/// <summary>
+		/// Retrieves a book by its unique MD5 value.
+		/// </summary>
+		/// <param name="md5">The MD5 code of the book.</param>
+		/// <returns>If found, the publication value, otherwise null</returns>
 		public Publication RetrieveBook(string md5)
 		{
 			string bibtex = this.RetrieveBookBibTex(md5);
@@ -167,7 +174,58 @@ namespace Kontiki
 
 		public List<Publication> QueryArticles(string tokens)
 		{
-			throw new NotImplementedException();
+			string requestString = $"{BASE_URL_ARTICLE_SEARCH}/?q={tokens}";
+
+			string responseString	= GetResponse(requestString);
+			HtmlDocument doc		= new HtmlDocument();
+			doc.LoadHtml(responseString);
+
+			HtmlNode table = doc.DocumentNode.SelectSingleNode("//table");
+
+			HtmlNode tableBody = table.SelectSingleNode("tbody");
+
+			List<Publication> publications = new List<Publication>();
+
+			foreach (HtmlNode tableRow in tableBody.SelectNodes("tr"))
+			{
+				Publication publication = new Publication(PublicationType.Article);
+
+				HtmlNode[] columns = tableRow.SelectNodes("td").ToArray();
+
+				publication.Author = columns[0].InnerText;
+
+				HtmlNode[] paragraphs = columns[1].SelectNodes("p").ToArray();
+
+				if (paragraphs.Length == 2)
+				{
+					publication.Title = paragraphs[0].InnerText;
+					publication.Doi = paragraphs[1].InnerText.Replace("DOI:", "").Trim();
+				}
+
+				try
+				{
+					paragraphs = columns[2].SelectNodes("p").ToArray();
+
+					if (paragraphs.Length == 2)
+					{
+						publication.Journal = paragraphs[0].SelectSingleNode("a").InnerText;
+
+						string[] article_data = ExtractArticleData(paragraphs[1].InnerText);
+
+						if (article_data != null)
+						{
+							publication.Volume = article_data[0];
+							publication.Issue = article_data[1];
+							publication.Year = article_data[2];
+						}
+					}
+				}
+				catch {}
+                
+                publications.Add(publication);
+			}
+
+			return publications;
 		}
 
 		public Publication RetrieveArticle(string doi)
@@ -237,6 +295,20 @@ namespace Kontiki
 			catch
 			{
 				return "";
+			}
+		}
+
+		private static string[] ExtractArticleData(string source)
+		{
+			var matches = Regex.Matches(source, @"\d+");
+
+			if (matches.Count == 3)
+			{
+				return new string[] {matches[0].Value, matches[1].Value, matches[2].Value};
+			}
+			else
+			{
+				return null;
 			}
 		}
 		#endregion
