@@ -41,6 +41,16 @@ namespace Kontiki.UnitTests
 			string bibtex = publication.ToBibTeX();
 
 			Publication p2 = Publication.FromBibTeX(bibtex);
+
+			var kontiki = new HapKontiki();
+			var books = kontiki.QueryBooks("bellman+richard");
+
+			foreach (var book in books)
+			{
+				Console.WriteLine(book.ToBibTeX());
+			}
+
+			Console.ReadLine();
 		}
 	}
 }
