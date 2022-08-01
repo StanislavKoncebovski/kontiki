@@ -100,6 +100,10 @@ class Kontiki:
         table = tables[2]  # it is always table 2
 
         table_rows = table.find_all("tr")
+
+        if len(table_rows) < 2:
+            return None
+
         columns = table_rows[1].find_all("td")
 
         publication = Publication('book')
@@ -162,7 +166,13 @@ class Kontiki:
         request = f"{Kontiki.BASE_URL_BOOK_BIBTEX}?md5={md5}"
         response_text = requests.get(request).text
         soup = bs(response_text, "html.parser")
-        bibtex = soup.find("textarea").text
+
+        textarea = soup.find("textarea")
+
+        if textarea is None:
+            return None
+
+        bibtex = textarea.text
 
         if format == 'bibtex':
             return bibtex
@@ -178,12 +188,15 @@ class Kontiki:
         :return: A pandas dataframe containing the articles found. The columns of the dataframe are the fields of the
                  output, such as MD5, Title, Author, DOI, etc.
         '''
-        request = f"{Kontiki.BASE_URL_ARTICLE_SEARCH}?q={tokens}"
+        request = f"{Kontiki.BASE_URL_ARTICLE_SEARCH}/?q={tokens}"
         response_text = requests.get(request).text
 
         soup = bs(response_text, 'html.parser')
 
         table = soup.find("table", {"class": "catalog"})
+
+        if table is None:
+            return []
 
         table_rows = table.find_all("tr")
 
@@ -213,7 +226,7 @@ class Kontiki:
 
         return publications
 
-    def retrieve_article(self, doi: str, format: str = 'dict') -> Union[Publication, str, None]:
+    def retrieve_article(self, doi: str, format: str = 'bibtex') -> Union[Publication, str, None]:
         '''
         Retrieves an article by its DOI value.
         :param doi: The DOI value.
@@ -225,12 +238,18 @@ class Kontiki:
         '''
         # http://libgen.rs/scimag/10.1006%2Fjath.1994.1061/bibtex
         request = f"{Kontiki.BASE_URL_ARTICLE_SEARCH}/{doi}/bibtex"
-        bibtex = requests.get(request).text
+        response_text = requests.get(request).text
 
         if format == 'bibtex':
-            return bibtex
+            soup = bs(response_text, 'html.parser')
+            error = soup.find("div", {"class": "error"})
+
+            if error is not None:
+                return None
+            else:
+                return response_text
         elif format == 'instance':
-            return Publication.from_bibtex(bibtex)
+            return Publication.from_bibtex(response_text)
         else:
             return None
 
