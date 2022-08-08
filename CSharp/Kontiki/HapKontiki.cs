@@ -23,7 +23,7 @@ namespace Kontiki
 		/// Implementation using HtmlAgilityPack
 		/// </summary>
 		#region Static members
-		private static string	BASE_URL_BOOK_SEARCH	= "http://libgen.rs/search.php";
+		private static string	BASE_URL_BOOK_SEARCH	= "https://libgen.rs/search.php";
 		private static string	BASE_URL_BOOK_BIBTEX	= "http://libgen.rs/book/bibtex.php";
 		private static string	BASE_URL_ARTICLE_SEARCH	= "http://libgen.rs/scimag";
 		private static int		DEFAULT_NUMBER_OF_ITEMS = 25;
@@ -66,6 +66,11 @@ namespace Kontiki
 			string requestString	= $"{BASE_URL_BOOK_SEARCH}?req={tokens}&res={DEFAULT_NUMBER_OF_ITEMS}&column={column}";
 			
 			string responseString	= GetResponse(requestString);
+
+			if (responseString == null)
+			{
+				return null;
+			}
 
 			HtmlDocument doc		= new HtmlDocument();
 			doc.LoadHtml(responseString);
