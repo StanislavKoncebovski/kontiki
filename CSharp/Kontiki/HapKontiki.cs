@@ -29,6 +29,45 @@ namespace Kontiki
 		private static int		DEFAULT_NUMBER_OF_ITEMS = 25;
 		#endregion
 
+		#region Properties
+		/// <summary>
+		/// Dictionary of LibGen's base URLs.
+		/// Key: the extension (or its replacements) like "rs", "is", etc.
+		/// Value: The base URL for that extension, like "https://libgen.rs" for "rs.
+		/// Sources: https://ardroiding.com/libgen-proxy-and-mirror-sites/
+		/// </summary>
+		public Dictionary<string, string>	BaseUrls {get;internal set;} = new Dictionary<string, string>()
+		{
+			{"freeanimesonline_proxy", "https://freeanimesonline.com/proxify.php?proxy=ZnJlZWFuaW1lc29ubGluZS5jb20=&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
+			{"sitenable.info_proxy",  "https://sitenable.info/proxify.php?proxy=c2l0ZW5hYmxlLmluZm8=&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
+			{"siteget_proxy", "https://siteget.net/proxify.php?proxy=c2l0ZWdldC5uZXQ=&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
+			{"freeproxy_proxy", "https://freeproxy.io/proxify.php?proxy=ZnJlZXByb3h5Lmlv&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
+			{"sitenable.co_proxy", "https://sitenable.co/proxify.php?proxy=c2l0ZW5hYmxlLmNv&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
+			{"sitenable.ch_proxy", "https://sitenable.ch/proxify.php?proxy=c2l0ZW5hYmxlLmNo&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
+			{"sitenable.pw proxy", "https://sitenable.pw/proxify.php?proxy=c2l0ZW5hYmxlLnB3&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
+		};
+
+		/// <summary>
+		/// Gets or sets the working Base URL key.
+		/// </summary>
+		public string WorkingUrlKey {get;set;}
+
+		/// <summary>
+		/// Gets the current base URL for book search.
+		/// </summary>
+		public string BaseBookSearchUrl {get;}
+
+		/// <summary>
+		/// Gets the current base URL for obtaining the BibTeX reference.
+		/// </summary>
+		public string BaseBibtexUrl {get;}
+
+		/// <summary>
+		/// Gets the current base URL for article search.
+		/// </summary>
+		public string BaseArticleSearchUrl {get;}
+		#endregion
+
 		#region IKontiki
 		/// <summary>
 		/// Carries out a general query for books using common tokens like title and author(s) name(s).

@@ -12,6 +12,36 @@ namespace Kontiki
 {
 	public interface IKontiki
 	{
+		#region Properties
+		/// <summary>
+		/// Dictionary of LibGen's base URLs.
+		/// Key: the extension (or its replacements) like "rs", "is", etc.
+		/// Value: The base URL for that extension, like "https://libgen.rs" for "rs.
+		/// </summary>
+		Dictionary<string, string>	BaseUrls {get;}
+
+		/// <summary>
+		/// Gets or sets the working Base URL key.
+		/// </summary>
+		string WorkingUrlKey {get;set;}
+
+		/// <summary>
+		/// Gets the current base URL for book search.
+		/// </summary>
+		string BaseBookSearchUrl {get;}
+
+		/// <summary>
+		/// Gets the current base URL for obtaining the BibTeX reference.
+		/// </summary>
+		string BaseBibtexUrl {get;}
+
+		/// <summary>
+		/// Gets the current base URL for article search.
+		/// </summary>
+		string BaseArticleSearchUrl {get;}
+		#endregion
+
+		#region Public Functionality
 		/// <summary>
 		/// Carries out a general query for books using common tokens like title and author(s) name(s).
 		/// </summary>
@@ -54,5 +84,6 @@ namespace Kontiki
 		/// <param name="doi">The DOI value.</param>
 		/// <returns>If found, the publication value, otherwise null.</returns>
 		Publication RetrieveArticle(string doi);
+		#endregion
 	}
 }
