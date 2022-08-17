@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BaseUrls>
+  <KontikiBaseUrl Name="Default" EndPoint="http://libgen.rs/" IsOnline="true" ConnectionTime="876" />
+  <KontikiBaseUrl Name="Proxy01" EndPoint="https://freeanimesonline.com/proxify.php?proxy=ZnJlZWFuaW1lc29ubGluZS5jb20=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="1129" />
+  <KontikiBaseUrl Name="Proxy02" EndPoint="https://sitenable.info/proxify.php?proxy=c2l0ZW5hYmxlLmluZm8=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="437" />
+  <KontikiBaseUrl Name="Proxy03" EndPoint="https://siteget.net/proxify.php?proxy=c2l0ZWdldC5uZXQ=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="813" />
+  <KontikiBaseUrl Name="Proxy04" EndPoint="https://freeproxy.io/proxify.php?proxy=ZnJlZXByb3h5Lmlv&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="645" />
+  <KontikiBaseUrl Name="Proxy05" EndPoint="https://sitenable.co/proxify.php?proxy=c2l0ZW5hYmxlLmNv&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="904" />
+  <KontikiBaseUrl Name="Proxy06" EndPoint="https://sitenable.ch/proxify.php?proxy=c2l0ZW5hYmxlLmNo&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="500" />
+  <KontikiBaseUrl Name="Proxy07" EndPoint="https://sitenable.pw/proxify.php?proxy=c2l0ZW5hYmxlLnB3&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="444" />
+</BaseUrls>
