@@ -50,6 +50,9 @@
   <ItemGroup>
     <Compile Include="HapKontiki.cs" />
     <Compile Include="IKontiki.cs" />
+    <Compile Include="IKontikiBaseUrlManager.cs" />
+    <Compile Include="KontikiBaseUrl.cs" />
+    <Compile Include="KontikiBaseUrlManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publication.cs" />
     <Compile Include="PublicationType.cs.cs" />

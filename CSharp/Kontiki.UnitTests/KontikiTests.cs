@@ -15,11 +15,19 @@ namespace Kontiki.UnitTests
 	[TestFixture]
 	public class KontikiTests
 	{
+		public void CheckingOnline_DefaultbasicUrl_Succeeds()
+		{
+			HapKontiki kontiki	= new HapKontiki();
+			string basicUrl		= kontiki.BaseUrls["Default"];
+			bool isOnline		= kontiki.IsOnline(basicUrl);
+		}
+
         public void QueryBooksValidGeneralQueryStringSucceeds()
 		{
             HapKontiki kontiki	= new HapKontiki();
 			string tokens		= "bellman richard";
 			List<Publication> publications = kontiki.QueryBooks(tokens);
+			Assert.IsNotNull(publications);
 			Assert.That(publications.Count > 0);
 		}
 

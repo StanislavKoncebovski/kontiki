@@ -43,6 +43,13 @@ namespace Kontiki
 
 		#region Public Functionality
 		/// <summary>
+		/// Cheks if a basic url is online.
+		/// </summary>
+		/// <param name="url">The basic URL to check.</param>
+		/// <returns>True, if online.</returns>
+		bool IsOnline(string url);
+
+		/// <summary>
 		/// Carries out a general query for books using common tokens like title and author(s) name(s).
 		/// </summary>
 		/// <param name="tokens">The string containing the tokens. The tokens can be divided by space or comma.</param>
