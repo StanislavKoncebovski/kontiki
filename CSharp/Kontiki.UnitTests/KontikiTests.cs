@@ -153,7 +153,7 @@ namespace Kontiki.UnitTests
 		}
 
 		#region Private Auxiliary
-		private static HapKontikiManager PrepareKontikiManager(string connectionName = "default")
+		public static HapKontikiManager PrepareKontikiManager(string connectionName = "default")
 		{
 			HapKontikiManager kontiki = new HapKontikiManager();
 			string connectionFileName = "kontiki_connections.xml";

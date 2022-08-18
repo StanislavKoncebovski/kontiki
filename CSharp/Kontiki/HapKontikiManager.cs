@@ -81,6 +81,19 @@ namespace Kontiki
 			HtmlDocument doc		= new HtmlDocument();
 			doc.LoadHtml(responseString);
 
+			Regex rx = new Regex(@"(?'pages'\d+), // общее число страниц");
+
+			Match match = rx.Match(responseString);
+
+			string numberString = match.Groups["pages"].Value;
+
+			int numberOfPages = 1;
+
+			if (!String.IsNullOrEmpty(numberString))
+			{
+				numberOfPages = Int32.Parse(numberString);
+			}
+
 			HtmlNode[] tables = doc.DocumentNode.SelectNodes("//table").ToArray();
 			HtmlNode table = tables[2];
 
