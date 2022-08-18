@@ -1,8 +1,8 @@
 ﻿/***********************************************************************************
-* File:         HapKontiki.cs                                                      *
-* Contents:     Class HapKontiki                                                   *
+* File:         HapKontikiManager.cs                                               *
+* Contents:     Class HapKontikiManager                                            *
 * Author:       Stanislav Koncebovski (stanislav@pikkatech.eu)                     *
-* Date:         2022-07-29 10:31                                                   *
+* Date:         2022-08-18 12:34                                                   *
 * Version:      1.0                                                                *
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
@@ -17,76 +17,20 @@ using HtmlAgilityPack;
 	
 namespace Kontiki
 {
-	public class HapKontiki : IKontiki
+	public class HapKontikiManager : IKontikiManager
 	{
 		/// <summary>
 		/// Implementation using HtmlAgilityPack
 		/// </summary>
 		#region Static members
-		private static string	BASE_URL_BOOK_SEARCH	= "https://libgen.rs/search.php";
-		private static string	BASE_URL_BOOK_BIBTEX	= "http://libgen.rs/book/bibtex.php";
-		private static string	BASE_URL_ARTICLE_SEARCH	= "http://libgen.rs/scimag";
 		private static int		DEFAULT_NUMBER_OF_ITEMS = 25;
 		#endregion
 
 		#region Properties
-		/// <summary>
-		/// Dictionary of LibGen's base URLs.
-		/// Key: the extension (or its replacements) like "rs", "is", etc.
-		/// Value: The base URL for that extension, like "https://libgen.rs" for "rs.
-		/// Sources: https://ardroiding.com/libgen-proxy-and-mirror-sites/
-		/// </summary>
-		public Dictionary<string, string>	BaseUrls {get;internal set;} = new Dictionary<string, string>()
-		{
-			{"Default", "http://libgen.rs/"},
-			{"Proxy01", "https://freeanimesonline.com/proxify.php?proxy=ZnJlZWFuaW1lc29ubGluZS5jb20=&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
-			{"Proxy02",	"https://sitenable.info/proxify.php?proxy=c2l0ZW5hYmxlLmluZm8=&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
-			{"Proxy03", "https://siteget.net/proxify.php?proxy=c2l0ZWdldC5uZXQ=&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
-			{"Proxy04", "https://freeproxy.io/proxify.php?proxy=ZnJlZXByb3h5Lmlv&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
-			{"Proxy05", "https://sitenable.co/proxify.php?proxy=c2l0ZW5hYmxlLmNv&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
-			{"Proxy06", "https://sitenable.ch/proxify.php?proxy=c2l0ZW5hYmxlLmNo&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
-			{"Proxy07", "https://sitenable.pw/proxify.php?proxy=c2l0ZW5hYmxlLnB3&amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw=="},
-		};
-
-		/// <summary>
-		/// Gets or sets the working Base URL key.
-		/// </summary>
-		public string WorkingUrlKey {get;set;}
-
-		/// <summary>
-		/// Gets the current base URL for book search.
-		/// </summary>
-		public string BaseBookSearchUrl {get;}
-
-		/// <summary>
-		/// Gets the current base URL for obtaining the BibTeX reference.
-		/// </summary>
-		public string BaseBibtexUrl {get;}
-
-		/// <summary>
-		/// Gets the current base URL for article search.
-		/// </summary>
-		public string BaseArticleSearchUrl {get;}
+		public IKontikiConnectionManager ConnectionManager {get;} = new KontikiConnectionManager();
 		#endregion
 
 		#region IKontiki
-		public bool IsOnline(string url)
-		{
-			WebRequest request = HttpWebRequest.Create(url);
-
-			try
-			{
-				using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-				{
-					return response.StatusCode == HttpStatusCode.OK;
-				}
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-		}
-
 		/// <summary>
 		/// Carries out a general query for books using common tokens like title and author(s) name(s).
 		/// </summary>
@@ -120,7 +64,12 @@ namespace Kontiki
 					break;
 			}
 
-			string requestString	= $"{BASE_URL_BOOK_SEARCH}?req={tokens}&res={DEFAULT_NUMBER_OF_ITEMS}&column={column}";
+			if (this.ConnectionManager.WorkingConnection == null)
+			{
+				return null;
+			}
+
+			string requestString	= $"{this.ConnectionManager.BookSearchUrl}?req={tokens}&res={DEFAULT_NUMBER_OF_ITEMS}&column={column}";
 			
 			string responseString	= GetResponse(requestString);
 
@@ -193,7 +142,7 @@ namespace Kontiki
 		{
 			try
 			{
-				string requestString	= $"{BASE_URL_BOOK_BIBTEX}?md5={md5}";
+				string requestString	= $"{this.ConnectionManager.BibtexUrl}?md5={md5}";
 				string responseString	= GetResponse(requestString);
 				HtmlDocument doc		= new HtmlDocument();
 				doc.LoadHtml(responseString);
@@ -240,16 +189,21 @@ namespace Kontiki
 		/// <returns>A list containing the articles found.</returns>
 		public List<Publication> QueryArticles(string tokens)
 		{
-			string requestString	= $"{BASE_URL_ARTICLE_SEARCH}/?q={tokens}";
+			string requestString	= $"{this.ConnectionManager.ArticleSearchUrl}/?q={tokens}";
 			string responseString	= GetResponse(requestString);
 			HtmlDocument doc		= new HtmlDocument();
 			doc.LoadHtml(responseString);
 
 			HtmlNode table = doc.DocumentNode.SelectSingleNode("//table");
 
-			HtmlNode tableBody = table.SelectSingleNode("tbody");
-
 			List<Publication> publications = new List<Publication>();
+
+			if (table == null)
+			{
+				return publications;
+			}
+
+			HtmlNode tableBody = table.SelectSingleNode("tbody");
 
 			foreach (HtmlNode tableRow in tableBody.SelectNodes("tr"))
 			{
@@ -300,7 +254,7 @@ namespace Kontiki
 		/// <returns>If found, the article's BibTeX reference value, otherwise null.</returns>
 		public string RetrieveArticleBibTex(string doi)
 		{
-			string requestString	= $"{BASE_URL_ARTICLE_SEARCH}/{doi}/bibtex";
+			string requestString	= $"{this.ConnectionManager.ArticleSearchUrl}/{doi}/bibtex";
 			string responseString	= GetResponse(requestString);
 			
 			return responseString;

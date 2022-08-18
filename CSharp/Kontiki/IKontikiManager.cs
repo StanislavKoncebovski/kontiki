@@ -1,8 +1,8 @@
 ﻿/***********************************************************************************
-* File:         IKontiki.cs                                                        *
-* Contents:     Interface IKontiki                                                 *
+* File:         IKontikiManager.cs                                                 *
+* Contents:     Interface IKontikiManager                                          *
 * Author:       Stanislav Koncebovski (stanislav@pikkatech.eu)                     *
-* Date:         2022-07-26 14:23                                                   *
+* Date:         2022-08-18 12:34                                                   *
 * Version:      1.0                                                                *
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
@@ -10,44 +10,13 @@ using System.Collections.Generic;
 
 namespace Kontiki
 {
-	public interface IKontiki
+	public interface IKontikiManager
 	{
 		#region Properties
-		/// <summary>
-		/// Dictionary of LibGen's base URLs.
-		/// Key: the extension (or its replacements) like "rs", "is", etc.
-		/// Value: The base URL for that extension, like "https://libgen.rs" for "rs.
-		/// </summary>
-		Dictionary<string, string>	BaseUrls {get;}
-
-		/// <summary>
-		/// Gets or sets the working Base URL key.
-		/// </summary>
-		string WorkingUrlKey {get;set;}
-
-		/// <summary>
-		/// Gets the current base URL for book search.
-		/// </summary>
-		string BaseBookSearchUrl {get;}
-
-		/// <summary>
-		/// Gets the current base URL for obtaining the BibTeX reference.
-		/// </summary>
-		string BaseBibtexUrl {get;}
-
-		/// <summary>
-		/// Gets the current base URL for article search.
-		/// </summary>
-		string BaseArticleSearchUrl {get;}
+		IKontikiConnectionManager ConnectionManager {get;}
 		#endregion
 
 		#region Public Functionality
-		/// <summary>
-		/// Cheks if a basic url is online.
-		/// </summary>
-		/// <param name="url">The basic URL to check.</param>
-		/// <returns>True, if online.</returns>
-		bool IsOnline(string url);
 
 		/// <summary>
 		/// Carries out a general query for books using common tokens like title and author(s) name(s).

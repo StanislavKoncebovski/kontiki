@@ -149,6 +149,7 @@ namespace Kontiki
 					if (connection.IsOnline)
 					{
 						connection.ConnectionTime = (int)stopwatch.ElapsedMilliseconds;
+						this.WorkingConnection = connection;
 					}
 					else
 					{

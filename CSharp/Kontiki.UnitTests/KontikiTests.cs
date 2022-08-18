@@ -15,125 +15,154 @@ namespace Kontiki.UnitTests
 	[TestFixture]
 	public class KontikiTests
 	{
-		public void CheckingOnline_DefaultbasicUrl_Succeeds()
+		[Test]
+		public void QueryBooksValidGeneralQueryStringSucceeds()
 		{
-			HapKontiki kontiki	= new HapKontiki();
-			string basicUrl		= kontiki.BaseUrls["Default"];
-			bool isOnline		= kontiki.IsOnline(basicUrl);
+           HapKontikiManager kontiki = PrepareKontikiManager();
+
+			if (kontiki.ConnectionManager.WorkingConnection != null)
+			{
+				string tokens = "bellman richard";
+				List<Publication> publications = kontiki.QueryBooks(tokens);
+				Assert.IsNotNull(publications);
+				Assert.That(publications.Count > 0);
+			}
 		}
 
-        public void QueryBooksValidGeneralQueryStringSucceeds()
-		{
-            HapKontiki kontiki	= new HapKontiki();
-			string tokens		= "bellman richard";
-			List<Publication> publications = kontiki.QueryBooks(tokens);
-			Assert.IsNotNull(publications);
-			Assert.That(publications.Count > 0);
-		}
-
+		[Test]
         public void QueryBooksInvalidGeneralQueryStringReturnsEmptySet()
 		{
-            HapKontiki kontiki	= new HapKontiki();
-			string tokens		= "^56m";
-			List<Publication> publications = kontiki.QueryBooks(tokens);
-			Assert.That(publications.Count == 0);
+            HapKontikiManager kontiki = PrepareKontikiManager();
+
+			if (kontiki.ConnectionManager.WorkingConnection != null)
+			{
+				string tokens		= "^56m";
+				List<Publication> publications = kontiki.QueryBooks(tokens);
+				Assert.That(publications.Count == 0);
+			}
 		}
 
+		[Test]
         public void QueryBooksByIsbnValidIsbnSucceeds()
 		{
-            HapKontiki kontiki	= new HapKontiki();
+            HapKontikiManager kontiki = PrepareKontikiManager();
 			string isbn = "9780486432588";
 			List<Publication> books = kontiki.QueryBooks(isbn, QueryColumn.ISBN);
 			Assert.That(books.Count == 1);
 		}
 
+		[Test]
 		public void QueryBooksByIsbnInvalidIsbnReturnsEmptySet()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string isbn = "9780486432580";
 			List<Publication> books = kontiki.QueryBooks(isbn, QueryColumn.ISBN);
 			Assert.That(books.Count == 0);
 		}
 
+		[Test]
 		public void QueryBooksByTagsValidTagsSucceeds()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string tags = "mathematics, numerical";
-			List<Publication> books = kontiki.QueryBooks(tags, QueryColumn.ISBN);
+			List<Publication> books = kontiki.QueryBooks(tags, QueryColumn.Tags);
 			Assert.That(books.Count > 0);
 		}
 
+		[Test]
 		public void QueryBooksByTagsInvalidTagsReturnsEmptySet()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string tags = "foxilization";
-			List<Publication> books = kontiki.QueryBooks(tags, QueryColumn.ISBN);
+			List<Publication> books = kontiki.QueryBooks(tags, QueryColumn.Tags);
 			Assert.That(books.Count == 0);
 		}
+
+		[Test]
 		public void RetrieveBookFormatBibtexValidMd5Succeeds()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string md5 = "16D8AEA90AB88BE35C6C8CB7B9335991";
 			string bibtex = kontiki.RetrieveBookBibTex(md5);
 			Assert.IsNotNull(bibtex);
 			Assert.That(bibtex.Length > 0);
 		}
 
+		[Test]
 		public void RetrieveBookFormatInstanceValidMd5Succeeds()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string md5 = "16D8AEA90AB88BE35C6C8CB7B9335991";
 			Publication book = kontiki.RetrieveBook(md5);
 			Assert.IsNotNull(book);
 		}
 
+		[Test]
 		public void RetrieveBookInvalidMd5ReturnsNone()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string md5 = "16D8AEA90AB88BE35C6C8CB7B9335992";
 			string bibtex = kontiki.RetrieveBookBibTex(md5);
 			Assert.IsNull(bibtex);
 		}
 
+		[Test]
 		public void QueryArticlesValidQueryStringSucceeds()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string tokens = "bellman richard matrix";
 			List<Publication> articles = kontiki.QueryArticles(tokens);
 			Assert.That(articles.Count > 0);
 		}
 
+		[Test]
 		public void QueryArticlesInvalidQueryStringReturnsEmptySet()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string tokens = "bellman richard cats";
 			List<Publication> articles = kontiki.QueryArticles(tokens);
 			Assert.That(articles.Count == 0);
 		}
 
+		[Test]
 		public void RetrieveArticleFormatBibtexValidDoiSucceeds()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string doi = "10.1016/0022-247x(78)90262-7";
 			Publication article = kontiki.RetrieveArticle(doi);
 			Assert.IsNotNull(article);
 		}
 
+		[Test]
 		public void RetrieveArticleFormatInstanceValidDoiSucceeds()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string doi = "10.1016/0022-247x(78)90262-7";
 			string bibtex = kontiki.RetrieveArticleBibTex(doi);
 			Assert.IsNotNull(bibtex);
 			Assert.That(bibtex.Length > 0);
 		}
 
+		[Test]
 		public void RetrieveArticleInvalidDoiReturnsEmptySet()
 		{
-			HapKontiki kontiki	= new HapKontiki();
+			HapKontikiManager kontiki = PrepareKontikiManager();
 			string doi = "10.1016/0022-247x(78)90262-8";
 			Publication article = kontiki.RetrieveArticle(doi);
 			Assert.IsNull(article);
 		}
+
+		#region Private Auxiliary
+		private static HapKontikiManager PrepareKontikiManager(string connectionName = "default")
+		{
+			HapKontikiManager kontiki = new HapKontikiManager();
+			string connectionFileName = "kontiki_connections.xml";
+			kontiki.ConnectionManager.Load(connectionFileName);
+			KontikiConnection connection = kontiki.ConnectionManager.Connections[connectionName];
+			kontiki.ConnectionManager.TestConnection(connection);
+
+			return kontiki;
+		}
+		#endregion
 	}
 }

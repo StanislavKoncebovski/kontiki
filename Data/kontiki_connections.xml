@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <KontikiConnections>
-  <KontikiConnection Name="Default" Url="http://libgen.rs/" IsOnline="true" ConnectionTime="462" />
-  <KontikiConnection Name="Proxy01" Url="https://freeanimesonline.com/proxify.php?proxy=ZnJlZWFuaW1lc29ubGluZS5jb20=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="774" />
-  <KontikiConnection Name="Proxy02" Url="https://sitenable.info/proxify.php?proxy=c2l0ZW5hYmxlLmluZm8=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="1004" />
-  <KontikiConnection Name="Proxy03" Url="https://siteget.net/proxify.php?proxy=c2l0ZWdldC5uZXQ=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="456" />
-  <KontikiConnection Name="Proxy04" Url="https://freeproxy.io/proxify.php?proxy=ZnJlZXByb3h5Lmlv&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="608" />
-  <KontikiConnection Name="Proxy05" Url="https://sitenable.co/proxify.php?proxy=c2l0ZW5hYmxlLmNv&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="482" />
-  <KontikiConnection Name="Proxy06" Url="https://sitenable.ch/proxify.php?proxy=c2l0ZW5hYmxlLmNo&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="687" />
-  <KontikiConnection Name="Proxy07" Url="https://sitenable.pw/proxify.php?proxy=c2l0ZW5hYmxlLnB3&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="520" />
+  <KontikiConnection Name="default" Url="http://libgen.rs" IsOnline="true" ConnectionTime="462" />
+  <KontikiConnection Name="proxy01" Url="https://freeanimesonline.com/proxify.php?proxy=ZnJlZWFuaW1lc29ubGluZS5jb20=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="774" />
+  <KontikiConnection Name="proxy02" Url="https://sitenable.info/proxify.php?proxy=c2l0ZW5hYmxlLmluZm8=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="1004" />
+  <KontikiConnection Name="proxy03" Url="https://siteget.net/proxify.php?proxy=c2l0ZWdldC5uZXQ=&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="456" />
+  <KontikiConnection Name="proxy04" Url="https://freeproxy.io/proxify.php?proxy=ZnJlZXByb3h5Lmlv&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="608" />
+  <KontikiConnection Name="proxy05" Url="https://sitenable.co/proxify.php?proxy=c2l0ZW5hYmxlLmNv&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="482" />
+  <KontikiConnection Name="proxy06" Url="https://sitenable.ch/proxify.php?proxy=c2l0ZW5hYmxlLmNo&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="687" />
+  <KontikiConnection Name="proxy07" Url="https://sitenable.pw/proxify.php?proxy=c2l0ZW5hYmxlLnB3&amp;amp;site=aHR0cDovL2dlbi5saWIucnVzLmVjLw==" IsOnline="true" ConnectionTime="520" />
 </KontikiConnections>

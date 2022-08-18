@@ -46,7 +46,7 @@ namespace Kontiki.UnitTests
 
 			Publication p2 = Publication.FromBibTeX(bibtex);
 
-			var kontiki = new HapKontiki();
+			var kontiki = new HapKontikiManager();
 			var books = kontiki.QueryBooks("9780898713992", QueryColumn.ISBN);
 
 			foreach (var book in books)
