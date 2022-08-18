@@ -1,22 +1,20 @@
 ﻿/***********************************************************************************
-* File:         KontikiBaseUrl.cs                                                  *
-* Contents:     Class KontikiBaseUrl                                               *
+* File:         KontikiConnection.cs                                               *
+* Contents:     Class KontikiConnection                                            *
 * Author:       Stanislav Koncebovski (stanislav@pikkatech.eu)                     *
-* Date:         2022-08-17 22:07                                                   *
+* Date:         2022-08-18 12:00                                                   *
 * Version:      1.0                                                                *
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
-
 using System;
-using System.ComponentModel;
 using System.Xml.Linq;
 
 namespace Kontiki
 {
 	/// <summary>
-	/// Holds information of Kontiki base urls.
+	/// Holds information of Kontiki connections (base urls).
 	/// </summary>
-	public class KontikiBaseUrl
+	public class KontikiConnection
 	{
 		#region Properties
 		/// <summary>
@@ -27,7 +25,7 @@ namespace Kontiki
 		/// <summary>
 		/// Endpoint URL of the base.
 		/// </summary>
-		public string	EndPoint		{get;set;}
+		public string	Url				{get;set;}
 
 		/// <summary>
 		/// True, if the endpoint is online and accessible.
@@ -41,42 +39,42 @@ namespace Kontiki
 		#endregion
 
 		#region Construction
-		public KontikiBaseUrl(string name, string endPoint, bool isOnline, int connectionTime)
+		public KontikiConnection(string name, string url, bool isOnline, int connectionTime)
 		{
 			this.Name			= name;
-			this.EndPoint		= endPoint;
+			this.Url			= url;
 			this.IsOnline		= isOnline;
 			this.ConnectionTime	= connectionTime;
 		}
 
-		public KontikiBaseUrl(string name, string endPoint) : this(name, endPoint, false, -1)													{}
-		public KontikiBaseUrl()								: this("", "")																		{}
-		public KontikiBaseUrl(KontikiBaseUrl baseUrl)		: this(baseUrl.Name, baseUrl.EndPoint, baseUrl.IsOnline, baseUrl.ConnectionTime)	{}
+		public KontikiConnection(string name, string url) : this(name, url, false, -1)																		{}
+		public KontikiConnection()								: this("", "")																				{}
+		public KontikiConnection(KontikiConnection connection)		: this(connection.Name, connection.Url, connection.IsOnline, connection.ConnectionTime)	{}
 		#endregion
 
 		#region XML
 		public XElement ToXElement()
 		{
-			XElement x = new XElement("KontikiBaseUrl");
+			XElement x = new XElement("KontikiConnection");
 
 			x.Add(new XAttribute("Name",			this.Name));
-			x.Add(new XAttribute("EndPoint",		this.EndPoint));
+			x.Add(new XAttribute("Url",				this.Url));
 			x.Add(new XAttribute("IsOnline",		this.IsOnline));
 			x.Add(new XAttribute("ConnectionTime",	this.ConnectionTime));
 
 			return x;
 		}
 
-		public static KontikiBaseUrl FromXElement(XElement x)
+		public static KontikiConnection FromXElement(XElement x)
 		{
-			KontikiBaseUrl baseUrl	= new KontikiBaseUrl();
+			KontikiConnection connection	= new KontikiConnection();
 
-			baseUrl.Name			= x.Attribute("Name").Value;
-			baseUrl.EndPoint		= x.Attribute("EndPoint").Value;
-			baseUrl.IsOnline		= Boolean.Parse(x.Attribute("IsOnline").Value);
-			baseUrl.ConnectionTime	= Int32.Parse(x.Attribute("ConnectionTime").Value);
+			connection.Name					= x.Attribute("Name").Value;
+			connection.Url					= x.Attribute("Url").Value;
+			connection.IsOnline				= Boolean.Parse(x.Attribute("IsOnline").Value);
+			connection.ConnectionTime		= Int32.Parse(x.Attribute("ConnectionTime").Value);
 
-			return baseUrl;
+			return connection;
 		}
 		#endregion
 	}
