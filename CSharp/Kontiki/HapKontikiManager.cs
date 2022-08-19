@@ -87,6 +87,7 @@ namespace Kontiki
 
 			string numberString = match.Groups["pages"].Value;
 
+			// *** This is the number of pages to open.
 			int numberOfPages = 1;
 
 			if (!String.IsNullOrEmpty(numberString))
@@ -94,12 +95,37 @@ namespace Kontiki
 				numberOfPages = Int32.Parse(numberString);
 			}
 
-			HtmlNode[] tables = doc.DocumentNode.SelectNodes("//table").ToArray();
-			HtmlNode table = tables[2];
+			if (numberOfPages == 1)
+			{
+				return this.RetrievePublications(doc);
+			}
+			else
+			{
+				// The global list of publications
+				List<Publication> publications = this.RetrievePublications(doc);
+
+				for (int pageNummer = 2; pageNummer <= numberOfPages; pageNummer++)
+				{
+					requestString	= $"{this.ConnectionManager.BookSearchUrl}?req={tokens}&res={DEFAULT_NUMBER_OF_ITEMS}&column={column}&page={pageNummer}";
+					responseString	= GetResponse(requestString);
+					doc				= new HtmlDocument();
+					doc.LoadHtml(responseString);
+
+					publications.AddRange(this.RetrievePublications(doc));
+				}
+
+				return publications;
+			}
+		}
+
+		private List<Publication> RetrievePublications(HtmlDocument doc)
+		{
+			List<Publication> publications = new List<Publication>();
+
+			HtmlNode[] tables			= doc.DocumentNode.SelectNodes("//table").ToArray();
+			HtmlNode table				= tables[2];
 
 			HtmlNodeCollection tableRows = table.SelectNodes("tr");
-
-			List<Publication> publications = new List<Publication>();
 
 			foreach (HtmlNode tableRow in tableRows.Skip(1))
 			{
