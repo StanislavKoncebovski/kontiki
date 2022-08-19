@@ -118,60 +118,6 @@ namespace Kontiki
 			}
 		}
 
-		private List<Publication> RetrievePublications(HtmlDocument doc)
-		{
-			List<Publication> publications = new List<Publication>();
-
-			HtmlNode[] tables			= doc.DocumentNode.SelectNodes("//table").ToArray();
-			HtmlNode table				= tables[2];
-
-			HtmlNodeCollection tableRows = table.SelectNodes("tr");
-
-			foreach (HtmlNode tableRow in tableRows.Skip(1))
-			{
-				HtmlNode[] columns		= tableRow.SelectNodes("td").ToArray();
-
-				Publication publication = new Publication(PublicationType.Book);
-				publication.Author		= columns[1].InnerText;
-
-				HtmlNode column2		= columns[2];
-
-				HtmlNode[] links		= column2.SelectNodes("a").ToArray();
-
-				if (links.Length == 2)
-				{
-					publication.Series		= links[0].InnerText;
-
-					publication.Title		= links[1].ChildNodes[0].InnerText;
-					publication.Edition		= GetSafeNodeValue(links[0], 1);
-					publication.Isbn		= GetSafeNodeValue(links[0], 4);
-				}
-				else if (links.Length == 1)
-				{
-					publication.Title		= links[0].ChildNodes[0].InnerText;
-					publication.Edition		= GetSafeNodeValue(links[0], 1);
-					publication.Isbn		= GetSafeNodeValue(links[0], 4);
-				}
-				else
-				{
-
-				}
-
-				publication.Publisher	= columns[3].InnerText;
-				publication.Year		= columns[4].InnerText;
-				publication.Pagetotal	= columns[5].InnerText;
-				publication.Language	= columns[6].InnerText;
-
-				string md5				= ExtractMd5(columns[9]);
-
-				publication.Md5			= md5;
-
-				publications.Add(publication);
-			}
-
-			return publications;
-		}
-
 		/// <summary>
 		/// Retrieves a book's BibTeX reference by its unique MD5 value.
 		/// </summary>
@@ -233,9 +179,47 @@ namespace Kontiki
 			HtmlDocument doc		= new HtmlDocument();
 			doc.LoadHtml(responseString);
 
-			HtmlNode table = doc.DocumentNode.SelectSingleNode("//table");
+			Regex rx = new Regex(@"var total_pages = (?'pages'\d+);");
 
+			Match match = rx.Match(responseString);
+
+			string numberString = match.Groups["pages"].Value;
+
+			// *** This is the number of pages to open.
+			int numberOfPages = 1;
+
+			if (!String.IsNullOrEmpty(numberString))
+			{
+				numberOfPages = Int32.Parse(numberString);
+			}
+
+			if (numberOfPages == 1)
+			{
+				return this.RetrieveArticles(doc);
+			}
+			else
+			{
+				List<Publication> publications = this.RetrieveArticles(doc);
+
+				for (int pageNummer = 2; pageNummer <= numberOfPages; pageNummer++)
+				{
+					requestString	= $"{this.ConnectionManager.ArticleSearchUrl}/?q={tokens}&page={pageNummer}";
+					responseString	= GetResponse(requestString);
+					doc				= new HtmlDocument();
+					doc.LoadHtml(responseString);
+
+					publications.AddRange(this.RetrieveArticles(doc));
+				}
+
+				return publications;
+			}
+		}
+
+		private List<Publication> RetrieveArticles(HtmlDocument doc)
+		{
 			List<Publication> publications = new List<Publication>();
+
+			HtmlNode table = doc.DocumentNode.SelectSingleNode("//table");
 
 			if (table == null)
 			{
@@ -351,6 +335,60 @@ namespace Kontiki
 			{
 				return null;
 			}
+		}
+
+		private List<Publication> RetrievePublications(HtmlDocument doc)
+		{
+			List<Publication> publications = new List<Publication>();
+
+			HtmlNode[] tables			= doc.DocumentNode.SelectNodes("//table").ToArray();
+			HtmlNode table				= tables[2];
+
+			HtmlNodeCollection tableRows = table.SelectNodes("tr");
+
+			foreach (HtmlNode tableRow in tableRows.Skip(1))
+			{
+				HtmlNode[] columns		= tableRow.SelectNodes("td").ToArray();
+
+				Publication publication = new Publication(PublicationType.Book);
+				publication.Author		= columns[1].InnerText;
+
+				HtmlNode column2		= columns[2];
+
+				HtmlNode[] links		= column2.SelectNodes("a").ToArray();
+
+				if (links.Length == 2)
+				{
+					publication.Series		= links[0].InnerText;
+
+					publication.Title		= links[1].ChildNodes[0].InnerText;
+					publication.Edition		= GetSafeNodeValue(links[0], 1);
+					publication.Isbn		= GetSafeNodeValue(links[0], 4);
+				}
+				else if (links.Length == 1)
+				{
+					publication.Title		= links[0].ChildNodes[0].InnerText;
+					publication.Edition		= GetSafeNodeValue(links[0], 1);
+					publication.Isbn		= GetSafeNodeValue(links[0], 4);
+				}
+				else
+				{
+
+				}
+
+				publication.Publisher	= columns[3].InnerText;
+				publication.Year		= columns[4].InnerText;
+				publication.Pagetotal	= columns[5].InnerText;
+				publication.Language	= columns[6].InnerText;
+
+				string md5				= ExtractMd5(columns[9]);
+
+				publication.Md5			= md5;
+
+				publications.Add(publication);
+			}
+
+			return publications;
 		}
 
 		/// <summary>

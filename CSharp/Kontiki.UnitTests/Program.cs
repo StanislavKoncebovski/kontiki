@@ -17,8 +17,11 @@ namespace Kontiki.UnitTests
 		{
 			HapKontikiManager kontiki = KontikiTests.PrepareKontikiManager();
 
-			string tokens = "james a. johnson";
-			List<Publication> publications = kontiki.QueryBooks(tokens);
+			//string tokens = "james a. johnson";
+			//List<Publication> publications = kontiki.QueryBooks(tokens);
+
+			string tokens = "richard bellman matrix";
+			List<Publication> publications = kontiki.QueryArticles(tokens);
 
 			//Publication publication = new Publication();
 			//publication.Abstract = "Jxuros metis el gxin mi scias metrojn por knabon lernejon sed ia de ni la sxancon estas vivmaniero el homoj";
