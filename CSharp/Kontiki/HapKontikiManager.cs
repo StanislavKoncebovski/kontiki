@@ -17,11 +17,11 @@ using HtmlAgilityPack;
 	
 namespace Kontiki
 {
+	/// <summary>
+	/// Implementation using HtmlAgilityPack
+	/// </summary>
 	public class HapKontikiManager : IKontikiManager
 	{
-		/// <summary>
-		/// Implementation using HtmlAgilityPack
-		/// </summary>
 		#region Static members
 		private static int		DEFAULT_NUMBER_OF_ITEMS = 25;
 		#endregion
@@ -97,12 +97,12 @@ namespace Kontiki
 
 			if (numberOfPages == 1)
 			{
-				return this.RetrievePublications(doc);
+				return this.ExtractBooksFromDocument(doc);
 			}
 			else
 			{
 				// The global list of publications
-				List<Publication> publications = this.RetrievePublications(doc);
+				List<Publication> publications = this.ExtractBooksFromDocument(doc);
 
 				for (int pageNummer = 2; pageNummer <= numberOfPages; pageNummer++)
 				{
@@ -111,7 +111,7 @@ namespace Kontiki
 					doc				= new HtmlDocument();
 					doc.LoadHtml(responseString);
 
-					publications.AddRange(this.RetrievePublications(doc));
+					publications.AddRange(this.ExtractBooksFromDocument(doc));
 				}
 
 				return publications;
@@ -185,7 +185,6 @@ namespace Kontiki
 
 			string numberString = match.Groups["pages"].Value;
 
-			// *** This is the number of pages to open.
 			int numberOfPages = 1;
 
 			if (!String.IsNullOrEmpty(numberString))
@@ -195,11 +194,11 @@ namespace Kontiki
 
 			if (numberOfPages == 1)
 			{
-				return this.RetrieveArticles(doc);
+				return this.ExtractArticlesFromDocument(doc);
 			}
 			else
 			{
-				List<Publication> publications = this.RetrieveArticles(doc);
+				List<Publication> publications = this.ExtractArticlesFromDocument(doc);
 
 				for (int pageNummer = 2; pageNummer <= numberOfPages; pageNummer++)
 				{
@@ -208,66 +207,11 @@ namespace Kontiki
 					doc				= new HtmlDocument();
 					doc.LoadHtml(responseString);
 
-					publications.AddRange(this.RetrieveArticles(doc));
+					publications.AddRange(this.ExtractArticlesFromDocument(doc));
 				}
 
 				return publications;
 			}
-		}
-
-		private List<Publication> RetrieveArticles(HtmlDocument doc)
-		{
-			List<Publication> publications = new List<Publication>();
-
-			HtmlNode table = doc.DocumentNode.SelectSingleNode("//table");
-
-			if (table == null)
-			{
-				return publications;
-			}
-
-			HtmlNode tableBody = table.SelectSingleNode("tbody");
-
-			foreach (HtmlNode tableRow in tableBody.SelectNodes("tr"))
-			{
-				Publication publication = new Publication(PublicationType.Article);
-
-				HtmlNode[] columns = tableRow.SelectNodes("td").ToArray();
-
-				publication.Author = columns[0].InnerText;
-
-				HtmlNode[] paragraphs = columns[1].SelectNodes("p").ToArray();
-
-				if (paragraphs.Length == 2)
-				{
-					publication.Title = paragraphs[0].InnerText;
-					publication.Doi = paragraphs[1].InnerText.Replace("DOI:", "").Trim();
-				}
-
-				try
-				{
-					paragraphs = columns[2].SelectNodes("p").ToArray();
-
-					if (paragraphs.Length == 2)
-					{
-						publication.Journal = paragraphs[0].SelectSingleNode("a").InnerText;
-
-						string[] article_data = ExtractArticleData(paragraphs[1].InnerText);
-
-						if (article_data != null)
-						{
-							publication.Volume = article_data[0];
-							publication.Issue = article_data[1];
-							publication.Year = article_data[2];
-						}
-					}
-				}
-				catch {}
-                
-                publications.Add(publication);
-			}
-
-			return publications;
 		}
 
 		/// <summary>
@@ -337,7 +281,7 @@ namespace Kontiki
 			}
 		}
 
-		private List<Publication> RetrievePublications(HtmlDocument doc)
+		private List<Publication> ExtractBooksFromDocument(HtmlDocument doc)
 		{
 			List<Publication> publications = new List<Publication>();
 
@@ -386,6 +330,61 @@ namespace Kontiki
 				publication.Md5			= md5;
 
 				publications.Add(publication);
+			}
+
+			return publications;
+		}
+
+		private List<Publication> ExtractArticlesFromDocument(HtmlDocument doc)
+		{
+			List<Publication> publications = new List<Publication>();
+
+			HtmlNode table = doc.DocumentNode.SelectSingleNode("//table");
+
+			if (table == null)
+			{
+				return publications;
+			}
+
+			HtmlNode tableBody = table.SelectSingleNode("tbody");
+
+			foreach (HtmlNode tableRow in tableBody.SelectNodes("tr"))
+			{
+				Publication publication = new Publication(PublicationType.Article);
+
+				HtmlNode[] columns = tableRow.SelectNodes("td").ToArray();
+
+				publication.Author = columns[0].InnerText;
+
+				HtmlNode[] paragraphs = columns[1].SelectNodes("p").ToArray();
+
+				if (paragraphs.Length == 2)
+				{
+					publication.Title = paragraphs[0].InnerText;
+					publication.Doi = paragraphs[1].InnerText.Replace("DOI:", "").Trim();
+				}
+
+				try
+				{
+					paragraphs = columns[2].SelectNodes("p").ToArray();
+
+					if (paragraphs.Length == 2)
+					{
+						publication.Journal = paragraphs[0].SelectSingleNode("a").InnerText;
+
+						string[] article_data = ExtractArticleData(paragraphs[1].InnerText);
+
+						if (article_data != null)
+						{
+							publication.Volume = article_data[0];
+							publication.Issue = article_data[1];
+							publication.Year = article_data[2];
+						}
+					}
+				}
+				catch {}
+                
+                publications.Add(publication);
 			}
 
 			return publications;

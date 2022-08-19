@@ -219,6 +219,24 @@ namespace Kontiki
 		}
 		#endregion
 
+		#region String representation
+		public override string ToString()
+		{
+			switch (this.PublicationType)
+			{
+				case PublicationType.Book:
+					return $"Book: ID={this.Id}. {this.Author}. {this.Title}, {this.Year}";
+
+				case PublicationType.Article:
+					return $"Article: ID = {this.Id}. {this.Author}. {this.Title}, {this.Journal}, {this.Year}:{this.Volume}:{this.Pages}";
+
+				case PublicationType.Unknown:
+				default:
+					return "Unknown";
+			}
+		}
+		#endregion
+
 		#region Private auxiliary
 		private static string Capitalize(string source)
 		{
