@@ -281,6 +281,11 @@ namespace Kontiki
 			}
 		}
 
+		/// <summary>
+		/// Extracts books from a Html document.
+		/// </summary>
+		/// <param name="doc">The Html document to extract boks from.</param>
+		/// <returns>List of books contained in the Html document.</returns>
 		private List<Publication> ExtractBooksFromDocument(HtmlDocument doc)
 		{
 			List<Publication> publications = new List<Publication>();
@@ -335,6 +340,11 @@ namespace Kontiki
 			return publications;
 		}
 
+		/// <summary>
+		/// Extracts articles from a Html document.
+		/// </summary>
+		/// <param name="doc">The Html document to extract articles from.</param>
+		/// <returns>List of articles contained in the Html document.</returns>
 		private List<Publication> ExtractArticlesFromDocument(HtmlDocument doc)
 		{
 			List<Publication> publications = new List<Publication>();
@@ -427,6 +437,11 @@ namespace Kontiki
 			}
 		}
 
+		/// <summary>
+		/// Extracts article data (volume, issue, year) from a source string.
+		/// </summary>
+		/// <param name="source">The source string containing the three nunmerical fields.</param>
+		/// <returns>Article data (volume, issue, year) extracted.</returns>
 		private static string[] ExtractArticleData(string source)
 		{
 			var matches = Regex.Matches(source, @"\d+");
