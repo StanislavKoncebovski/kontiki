@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Kontiki.UnitTests")]
+[assembly: AssemblyTitle("Kontiki.WF")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Kontiki.UnitTests")]
+[assembly: AssemblyProduct("Kontiki.WF")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("72cd103c-dfa0-4e77-9c94-7d4e35e8eb2b")]
+[assembly: Guid("1b11ac5c-cb30-4026-ad37-6c428c35a28d")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2022.8.22.141")]
-[assembly: AssemblyFileVersion("2022.8.22.141")]
+[assembly: AssemblyVersion("2022.8.22.6")]
+[assembly: AssemblyFileVersion("2022.8.22.6")]
