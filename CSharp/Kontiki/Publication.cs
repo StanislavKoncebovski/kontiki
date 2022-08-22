@@ -7,13 +7,12 @@
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Microsoft.SqlServer.Server;
+using Kontiki.Tools.Xml;
 
 namespace Kontiki
 {
@@ -23,7 +22,7 @@ namespace Kontiki
 	public class Publication
 	{
 		#region Private ststic members
-		private static List<string>	_fieldsRestricted = new List<string>{"Md5"};
+		private static List<string>			_fieldsRestricted = new List<string>{"Md5"};
 		#endregion
 
 		#region Properties
@@ -210,12 +209,91 @@ namespace Kontiki
 		#region XML
 		public XElement ToXElement()
 		{
-			throw new NotImplementedException();
+			XElement x = new XElement("Publication");
+
+			x.Add(new XAttribute("PublicationType",	this.PublicationType));
+			x.Add(new XAttribute("Id",		this.Id));
+
+			x.Add(new XElement("Md5",		this.Md5));
+			x.Add(new XElement("Title",		this.Title));
+			x.Add(new XElement("Subtitle",	this.Subtitle));
+			x.Add(new XElement("Author",	this.Author));
+
+			x.Add(new XElement("Volume",	this.Volume));
+			x.Add(new XElement("Number",	this.Number));
+			x.Add(new XElement("Year",		this.Year));
+			x.Add(new XElement("Month",		this.Month));
+			x.Add(new XElement("Edition",	this.Edition));
+			x.Add(new XElement("Publisher", this.Publisher));
+			x.Add(new XElement("Address",	this.Address));
+			x.Add(new XElement("Pagetotal", this.Pagetotal));
+			x.Add(new XElement("Address",	this.Address));
+			x.Add(new XElement("Journal",	this.Journal));
+
+			x.Add(new XElement("Pages",		this.Pages));		
+			x.Add(new XElement("Issue",		this.Issue));		
+			x.Add(new XElement("Isbn",		this.Isbn));		
+			x.Add(new XElement("Issn",		this.Issn));		
+			x.Add(new XElement("Doi",		this.Doi));		
+			x.Add(new XElement("Language",	this.Language));
+			x.Add(new XElement("Note",		this.Note));		
+			x.Add(new XElement("Url",		this.Url));			
+			x.Add(new XElement("UrlDate",	this.UrlDate));
+			x.Add(new XElement("Abstract",	this.Abstract));
+
+			XElement xForeginIdentifiers	= new XElement("ForeignIds");
+			x.Add(xForeginIdentifiers);
+
+			foreach (string key in this.ForeignIdentifiers.Keys)
+			{
+				xForeginIdentifiers.Add(new XElement(key, this.ForeignIdentifiers[key]));
+			}
+
+			return x;
 		}
 
 		public static Publication FromXElement(XElement x)
 		{
-			throw new NotImplementedException();
+			Publication publication = new Publication();
+
+			publication.PublicationType	= (PublicationType)x.GetAttributeEnum(typeof(PublicationType), "PublicationType", PublicationType.Unknown);
+			publication.Id				= x.GetAttributeValue<int>("Id");
+			publication.Md5				= x.GetElementValue<string>("Md5");
+			publication.Title			= x.GetElementValue<string>("Title");
+			publication.Subtitle		= x.GetElementValue<string>("Subtitle");
+			publication.Author			= x.GetElementValue<string>("Author");
+			publication.Volume			= x.GetElementValue<string>("Volume");
+			publication.Number			= x.GetElementValue<string>("Number");
+			publication.Series			= x.GetElementValue<string>("Series");
+			publication.Year			= x.GetElementValue<string>("Year");
+			publication.Month			= x.GetElementValue<string>("Month");
+			publication.Edition			= x.GetElementValue<string>("Edition");
+			publication.Publisher		= x.GetElementValue<string>("Publisher");
+			publication.Address			= x.GetElementValue<string>("Address");
+			publication.Pagetotal		= x.GetElementValue<string>("Pagetotal");
+			publication.Journal			= x.GetElementValue<string>("Journal");
+			publication.Pages			= x.GetElementValue<string>("Pages");
+			publication.Issue			= x.GetElementValue<string>("Issue");
+			publication.Isbn			= x.GetElementValue<string>("Isbn");
+			publication.Issn			= x.GetElementValue<string>("Issn");
+			publication.Doi				= x.GetElementValue<string>("Doi");
+			publication.Language		= x.GetElementValue<string>("Language");
+			publication.Note			= x.GetElementValue<string>("Note");
+			publication.Url				= x.GetElementValue<string>("Url");
+			publication.UrlDate			= x.GetElementValue<string>("UrlDate");
+			publication.Abstract		= x.GetElementValue<string>("Abstract");
+
+			XElement xForeginIdentifiers	= x.Element("ForeignIds");
+
+			if (xForeginIdentifiers != null)
+			{
+				foreach (XElement xItem in xForeginIdentifiers.Elements())
+				{
+					publication.ForeignIdentifiers.Add(xItem.Name.ToString(), xItem.Value);
+				}
+			}
+			
+			return publication;
 		}
 		#endregion
 
