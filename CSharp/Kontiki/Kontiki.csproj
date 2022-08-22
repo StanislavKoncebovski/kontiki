@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collection\CollectionNode.cs" />
+    <Compile Include="Collection\KontikiCollection.cs" />
     <Compile Include="HapKontikiManager.cs" />
     <Compile Include="IKontikiManager.cs" />
     <Compile Include="IKontikiConnectionManager.cs" />

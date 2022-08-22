@@ -7,6 +7,7 @@
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -303,7 +304,13 @@ namespace Kontiki
 			switch (this.PublicationType)
 			{
 				case PublicationType.Book:
-					return $"Book: ID={this.Id}. {this.Author}. {this.Title}, {this.Year}";
+					string result = $"{this.Author}. {this.Title}, {this.Year}";
+					if (!String.IsNullOrEmpty(this.Isbn))
+					{
+						result += $". ISBN {this.Isbn}";
+					}
+
+					return result;
 
 				case PublicationType.Article:
 					return $"Article: ID = {this.Id}. {this.Author}. {this.Title}, {this.Journal}, {this.Year}:{this.Volume}:{this.Pages}";

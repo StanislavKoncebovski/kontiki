@@ -40,7 +40,18 @@ namespace Kontiki.WF.Gui.Controls
 		{
 			if (this._cxPublicationType.SelectedItem.ToString() == "Book")
 			{
+				this.Cursor = Cursors.WaitCursor;
+
 				List<Publication> books = KontikiForm.KontikiManager.QueryBooks(this._txTokens.Text, (QueryColumn)this._cxQueryParameters.SelectedItem);
+
+				this._clbQueryResults.Items.Clear();
+
+				foreach (Publication book in books)
+				{
+					this._clbQueryResults.Items.Add(book);
+				}
+
+				this.Cursor = Cursors.Default;
 			}
 		}
 	}

@@ -30,8 +30,6 @@ namespace Kontiki.WF
 		private void InitializeComponent()
 		{
 			this._msKontiki = new System.Windows.Forms.MenuStrip();
-			this._stsKontiki = new System.Windows.Forms.StatusStrip();
-			this._tsKontiki = new System.Windows.Forms.ToolStrip();
 			this.collectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,10 +42,18 @@ namespace Kontiki.WF
 			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this._tlpKontiki = new System.Windows.Forms.TableLayoutPanel();
+			this._stsKontiki = new System.Windows.Forms.StatusStrip();
+			this._tsKontiki = new System.Windows.Forms.ToolStrip();
 			this._ctrlQuery = new Kontiki.WF.Gui.Controls.QueryControl();
+			this._scCollection = new System.Windows.Forms.SplitContainer();
+			this._scQuery = new System.Windows.Forms.SplitContainer();
 			this._msKontiki.SuspendLayout();
-			this._tlpKontiki.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._scCollection)).BeginInit();
+			this._scCollection.Panel2.SuspendLayout();
+			this._scCollection.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._scQuery)).BeginInit();
+			this._scQuery.Panel2.SuspendLayout();
+			this._scQuery.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _msKontiki
@@ -59,27 +65,9 @@ namespace Kontiki.WF
             this.helpToolStripMenuItem});
 			this._msKontiki.Location = new System.Drawing.Point(0, 0);
 			this._msKontiki.Name = "_msKontiki";
-			this._msKontiki.Size = new System.Drawing.Size(1035, 25);
+			this._msKontiki.Size = new System.Drawing.Size(1237, 25);
 			this._msKontiki.TabIndex = 0;
 			this._msKontiki.Text = "menuStrip1";
-			// 
-			// _stsKontiki
-			// 
-			this._stsKontiki.Location = new System.Drawing.Point(0, 510);
-			this._stsKontiki.Name = "_stsKontiki";
-			this._stsKontiki.Size = new System.Drawing.Size(1035, 22);
-			this._stsKontiki.TabIndex = 1;
-			this._stsKontiki.Text = "statusStrip1";
-			// 
-			// _tsKontiki
-			// 
-			this._tsKontiki.AutoSize = false;
-			this._tsKontiki.ImageScalingSize = new System.Drawing.Size(38, 38);
-			this._tsKontiki.Location = new System.Drawing.Point(0, 25);
-			this._tsKontiki.Name = "_tsKontiki";
-			this._tsKontiki.Size = new System.Drawing.Size(1035, 40);
-			this._tsKontiki.TabIndex = 2;
-			this._tsKontiki.Text = "toolStrip1";
 			// 
 			// collectionToolStripMenuItem
 			// 
@@ -98,42 +86,42 @@ namespace Kontiki.WF
 			// newToolStripMenuItem
 			// 
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.newToolStripMenuItem.Text = "&New";
 			// 
 			// editToolStripMenuItem
 			// 
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.editToolStripMenuItem.Text = "&Edit";
 			// 
 			// closeToolStripMenuItem
 			// 
 			this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-			this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.closeToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.closeToolStripMenuItem.Text = "&Close";
 			// 
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.saveToolStripMenuItem.Text = "&Save";
 			// 
 			// saveasToolStripMenuItem
 			// 
 			this.saveasToolStripMenuItem.Name = "saveasToolStripMenuItem";
-			this.saveasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.saveasToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.saveasToolStripMenuItem.Text = "Save &as";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(129, 6);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.quitToolStripMenuItem.Text = "&Quit";
 			// 
 			// toolsToolStripMenuItem
@@ -147,7 +135,7 @@ namespace Kontiki.WF
 			// settingsToolStripMenuItem
 			// 
 			this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.settingsToolStripMenuItem.Text = "&Settings";
 			// 
 			// helpToolStripMenuItem
@@ -161,42 +149,70 @@ namespace Kontiki.WF
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
 			this.aboutToolStripMenuItem.Text = "&About";
 			// 
-			// _tlpKontiki
+			// _stsKontiki
 			// 
-			this._tlpKontiki.ColumnCount = 3;
-			this._tlpKontiki.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-			this._tlpKontiki.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-			this._tlpKontiki.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-			this._tlpKontiki.Controls.Add(this._ctrlQuery, 2, 0);
-			this._tlpKontiki.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._tlpKontiki.Location = new System.Drawing.Point(0, 65);
-			this._tlpKontiki.Margin = new System.Windows.Forms.Padding(0);
-			this._tlpKontiki.Name = "_tlpKontiki";
-			this._tlpKontiki.RowCount = 1;
-			this._tlpKontiki.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this._tlpKontiki.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this._tlpKontiki.Size = new System.Drawing.Size(1035, 445);
-			this._tlpKontiki.TabIndex = 3;
+			this._stsKontiki.Location = new System.Drawing.Point(0, 615);
+			this._stsKontiki.Name = "_stsKontiki";
+			this._stsKontiki.Size = new System.Drawing.Size(1237, 22);
+			this._stsKontiki.TabIndex = 1;
+			this._stsKontiki.Text = "statusStrip1";
+			// 
+			// _tsKontiki
+			// 
+			this._tsKontiki.AutoSize = false;
+			this._tsKontiki.ImageScalingSize = new System.Drawing.Size(38, 38);
+			this._tsKontiki.Location = new System.Drawing.Point(0, 25);
+			this._tsKontiki.Name = "_tsKontiki";
+			this._tsKontiki.Size = new System.Drawing.Size(1237, 40);
+			this._tsKontiki.TabIndex = 2;
+			this._tsKontiki.Text = "toolStrip1";
 			// 
 			// _ctrlQuery
 			// 
 			this._ctrlQuery.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._ctrlQuery.Font = new System.Drawing.Font("Consolas", 10F);
-			this._ctrlQuery.Location = new System.Drawing.Point(724, 0);
+			this._ctrlQuery.Location = new System.Drawing.Point(0, 0);
 			this._ctrlQuery.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this._ctrlQuery.Name = "_ctrlQuery";
-			this._ctrlQuery.Size = new System.Drawing.Size(308, 445);
+			this._ctrlQuery.Size = new System.Drawing.Size(544, 550);
 			this._ctrlQuery.TabIndex = 0;
+			// 
+			// _scCollection
+			// 
+			this._scCollection.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._scCollection.Location = new System.Drawing.Point(0, 65);
+			this._scCollection.Margin = new System.Windows.Forms.Padding(0);
+			this._scCollection.Name = "_scCollection";
+			// 
+			// _scCollection.Panel2
+			// 
+			this._scCollection.Panel2.Controls.Add(this._scQuery);
+			this._scCollection.Size = new System.Drawing.Size(1237, 550);
+			this._scCollection.SplitterDistance = 412;
+			this._scCollection.TabIndex = 4;
+			// 
+			// _scQuery
+			// 
+			this._scQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._scQuery.Location = new System.Drawing.Point(0, 0);
+			this._scQuery.Name = "_scQuery";
+			// 
+			// _scQuery.Panel2
+			// 
+			this._scQuery.Panel2.Controls.Add(this._ctrlQuery);
+			this._scQuery.Size = new System.Drawing.Size(821, 550);
+			this._scQuery.SplitterDistance = 273;
+			this._scQuery.TabIndex = 0;
 			// 
 			// KontikiForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1035, 532);
-			this.Controls.Add(this._tlpKontiki);
+			this.ClientSize = new System.Drawing.Size(1237, 637);
+			this.Controls.Add(this._scCollection);
 			this.Controls.Add(this._tsKontiki);
 			this.Controls.Add(this._stsKontiki);
 			this.Controls.Add(this._msKontiki);
@@ -206,7 +222,12 @@ namespace Kontiki.WF
 			this.Text = "Kontiki 1.0";
 			this._msKontiki.ResumeLayout(false);
 			this._msKontiki.PerformLayout();
-			this._tlpKontiki.ResumeLayout(false);
+			this._scCollection.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this._scCollection)).EndInit();
+			this._scCollection.ResumeLayout(false);
+			this._scQuery.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this._scQuery)).EndInit();
+			this._scQuery.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -229,8 +250,9 @@ namespace Kontiki.WF
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.StatusStrip _stsKontiki;
 		private System.Windows.Forms.ToolStrip _tsKontiki;
-		private System.Windows.Forms.TableLayoutPanel _tlpKontiki;
 		private Gui.Controls.QueryControl _ctrlQuery;
+		private System.Windows.Forms.SplitContainer _scCollection;
+		private System.Windows.Forms.SplitContainer _scQuery;
 	}
 }
 
