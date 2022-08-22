@@ -88,5 +88,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kontiki\Kontiki.csproj">
+      <Project>{d4a4f7ac-8097-49bc-9f96-3f0ae9de9451}</Project>
+      <Name>Kontiki</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

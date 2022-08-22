@@ -126,6 +126,7 @@ namespace Kontiki.WF.Gui.Controls
 			this._btStartQuery.TabIndex = 4;
 			this._btStartQuery.Text = "&Start";
 			this._btStartQuery.UseVisualStyleBackColor = true;
+			this._btStartQuery.Click += new System.EventHandler(this.OnStartQuery);
 			// 
 			// _btCancel
 			// 
@@ -174,6 +175,7 @@ namespace Kontiki.WF.Gui.Controls
 			// 
 			this._tlpQueryControl.SetColumnSpan(this._cxSource, 2);
 			this._cxSource.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._cxSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._cxSource.FormattingEnabled = true;
 			this._cxSource.Location = new System.Drawing.Point(160, 5);
 			this._cxSource.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
@@ -185,6 +187,7 @@ namespace Kontiki.WF.Gui.Controls
 			// 
 			this._tlpQueryControl.SetColumnSpan(this._cxPublicationType, 2);
 			this._cxPublicationType.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._cxPublicationType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._cxPublicationType.FormattingEnabled = true;
 			this._cxPublicationType.Location = new System.Drawing.Point(160, 37);
 			this._cxPublicationType.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
@@ -196,6 +199,7 @@ namespace Kontiki.WF.Gui.Controls
 			// 
 			this._tlpQueryControl.SetColumnSpan(this._cxQueryParameters, 2);
 			this._cxQueryParameters.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._cxQueryParameters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this._cxQueryParameters.FormattingEnabled = true;
 			this._cxQueryParameters.Location = new System.Drawing.Point(160, 69);
 			this._cxQueryParameters.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
