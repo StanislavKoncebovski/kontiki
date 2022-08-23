@@ -119,7 +119,7 @@ namespace Kontiki
 					break;
 			}
 
-			string result = $"@{publicationType}{{{this.PublicationType.ToString().ToLower()}_{this.Id},\n";
+			string result = $"@{publicationType}{{{this.PublicationType.ToString().ToLower()}_{this.Id},\r\n";
 
 			PropertyInfo[] properties = typeof(Publication).GetProperties();
 
@@ -150,7 +150,7 @@ namespace Kontiki
 
 					string delim = new string('\t',  (3 - ((4 + key.Length) / 5)));
 
-					string line = $"\t{key} ={delim}{{{value}}},\n";
+					string line = $"\t{key} ={delim}{{{value}}},\r\n";
 
 					result += line;
 				}

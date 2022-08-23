@@ -6,6 +6,7 @@
 * Version:      1.0                                                                *
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
+using System.Linq;
 using System.Windows.Forms;
 using Kontiki.Collection;
 
@@ -56,12 +57,70 @@ namespace Kontiki.WF
 			{
 				this._collectionFileName	= dialog.FileName;
 				this._collection			= KontikiCollection.Load(this._collectionFileName);
+				this.DisplayCollectionFolders();
 			}
 		}
 
 		private void OnCollectionQuit(object sender, System.EventArgs e)
 		{
 			this.Close();
+		}
+
+		private void DisplayCollectionFolders()
+		{
+			this._tvCollection.Nodes.Clear();
+
+			TreeNode tnRoot = this.CreateCollectionTreeNode(_collection.Root);
+
+			this._tvCollection.Nodes.Add(tnRoot);
+		}
+
+		private TreeNode CreateCollectionTreeNode(CollectionNode node)
+		{
+			if (node.IsPublication)
+			{
+				return null;
+			}
+
+			TreeNode tnFolder	= new TreeNode(node.FolderName);
+			tnFolder.Tag		= node;
+
+			foreach (CollectionNode child in node.Children)
+			{
+				TreeNode tnChild = this.CreateCollectionTreeNode(child);
+
+				if (tnChild != null)
+				{
+					tnFolder.Nodes.Add(tnChild);
+				}
+			}
+
+			return tnFolder;
+		}
+
+		private void OnSelectedNodeChanged(object sender, TreeViewEventArgs e)
+		{
+			if (this._tvCollection.SelectedNode != null)
+			{
+				CollectionNode node = this._tvCollection.SelectedNode.Tag as CollectionNode;
+
+				if (node.IsFolder)
+				{
+					this._lbPublications.Items.Clear();
+
+					foreach (CollectionNode child in node.Children.Where(c => c.IsPublication))
+					{
+						this._lbPublications.Items.Add(child.Publication);
+					}
+				}
+			}
+		}
+
+		private void OnPublicstionSelected(object sender, System.EventArgs e)
+		{
+			Publication publication = this._lbPublications.SelectedItem as Publication;
+
+			this._txPublicationBibTeX.Text = publication.ToBibTeX();
 		}
 	}
 }

@@ -92,6 +92,8 @@ namespace Kontiki.UnitTests
 			XElement x = collection.ToXElement();
 
 			KontikiCollection collection1 = KontikiCollection.FromXElement(x);
+
+			collection.Save("test1.kontiki");
 		}
 	}
 }
