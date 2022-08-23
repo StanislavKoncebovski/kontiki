@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KontikiCollectionTests.cs" />
     <Compile Include="KontikiConnectionManagerTests.cs" />
     <Compile Include="KontikiTests.cs" />
     <Compile Include="Program.cs" />
@@ -59,6 +60,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Kontiki.WF\Kontiki.WF.csproj">
+      <Project>{1b11ac5c-cb30-4026-ad37-6c428c35a28d}</Project>
+      <Name>Kontiki.WF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kontiki\Kontiki.csproj">
       <Project>{d4a4f7ac-8097-49bc-9f96-3f0ae9de9451}</Project>
       <Name>Kontiki</Name>
