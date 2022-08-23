@@ -47,6 +47,7 @@ namespace Kontiki.WF
 			this._ctrlQuery = new Kontiki.WF.Gui.Controls.QueryControl();
 			this._scCollection = new System.Windows.Forms.SplitContainer();
 			this._scQuery = new System.Windows.Forms.SplitContainer();
+			this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this._msKontiki.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._scCollection)).BeginInit();
 			this._scCollection.Panel2.SuspendLayout();
@@ -75,6 +76,7 @@ namespace Kontiki.WF
             this.newToolStripMenuItem,
             this.editToolStripMenuItem,
             this.closeToolStripMenuItem,
+            this.loadToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.saveasToolStripMenuItem,
             this.toolStripSeparator1,
@@ -86,43 +88,45 @@ namespace Kontiki.WF
 			// newToolStripMenuItem
 			// 
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.newToolStripMenuItem.Text = "&New";
+			this.newToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionNew);
 			// 
 			// editToolStripMenuItem
 			// 
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.editToolStripMenuItem.Text = "&Edit";
 			// 
 			// closeToolStripMenuItem
 			// 
 			this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-			this.closeToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+			this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.closeToolStripMenuItem.Text = "&Close";
 			// 
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.saveToolStripMenuItem.Text = "&Save";
 			// 
 			// saveasToolStripMenuItem
 			// 
 			this.saveasToolStripMenuItem.Name = "saveasToolStripMenuItem";
-			this.saveasToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+			this.saveasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.saveasToolStripMenuItem.Text = "Save &as";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(129, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.quitToolStripMenuItem.Text = "&Quit";
+			this.quitToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionQuit);
 			// 
 			// toolsToolStripMenuItem
 			// 
@@ -207,6 +211,13 @@ namespace Kontiki.WF
 			this._scQuery.SplitterDistance = 273;
 			this._scQuery.TabIndex = 0;
 			// 
+			// loadToolStripMenuItem
+			// 
+			this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+			this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.loadToolStripMenuItem.Text = "&Load";
+			this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionLoad);
+			// 
 			// KontikiForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -253,6 +264,7 @@ namespace Kontiki.WF
 		private Gui.Controls.QueryControl _ctrlQuery;
 		private System.Windows.Forms.SplitContainer _scCollection;
 		private System.Windows.Forms.SplitContainer _scQuery;
+		private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
 	}
 }
 

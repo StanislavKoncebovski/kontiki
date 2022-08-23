@@ -6,11 +6,6 @@
 * Version:      1.0                                                                *
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Kontiki.Collection
@@ -66,6 +61,18 @@ namespace Kontiki.Collection
 			collection.Root			= CollectionNode.FromXElement(x.Element("CollectionFolder"));
 
 			return collection;
+		}
+		#endregion
+
+		#region I/O
+		public void Save(string fileName)
+		{
+			this.ToXElement().Save(fileName);
+		}
+
+		public static KontikiCollection Load(string fileName)
+		{
+			return KontikiCollection.FromXElement(XElement.Load(fileName));
 		}
 		#endregion
 	}
