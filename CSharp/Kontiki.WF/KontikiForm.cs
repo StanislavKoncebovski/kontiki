@@ -24,9 +24,30 @@ namespace Kontiki.WF
 		{
 			InitializeComponent();
 
+			this._ctrlQuery.PublicationsSelected += this.OnQueryPublicationsSelected;
+
 			this.PrepareKontikiConnection();
 		}
 
+		private void OnQueryPublicationsSelected(Publication[] publications)
+		{
+			if (this._tvCollection.SelectedNode == null)
+			{
+				return;
+			}
+
+			CollectionNode nodeSelected = this._tvCollection.SelectedNode.Tag as CollectionNode;
+
+			if (nodeSelected.IsFolder)
+			{
+				foreach (Publication publication in publications)
+				{
+					nodeSelected.Children.Add(new CollectionNode(publication));
+				}
+
+				this.OnSelectedNodeChanged(null, null);
+			}
+		}
 		private void PrepareKontikiConnection(string connectionName = "default")
 		{
 			KontikiManager.ConnectionManager.Load(_connectionFileName);
@@ -120,7 +141,36 @@ namespace Kontiki.WF
 		{
 			Publication publication = this._lbPublications.SelectedItem as Publication;
 
-			this._txPublicationBibTeX.Text = publication.ToBibTeX();
+			if (publication != null)
+			{
+				this._txPublicationBibTeX.Text = publication.ToBibTeX();
+			}
+		}
+
+		private void OnCollectionSave(object sender, System.EventArgs e)
+		{
+			if (string.IsNullOrEmpty(this._collectionFileName))
+			{
+				this.OnCollectionSaveAs(sender, e);
+			}
+			else
+			{
+				this._collection.Save(this._collectionFileName);
+			}
+		}
+
+		private void OnCollectionSaveAs(object sender, System.EventArgs e)
+		{
+			SaveFileDialog dialog = new SaveFileDialog();
+
+			dialog.Filter = "Kontiki collection files (*.kontiki)|*.kontiki";
+
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				this._collectionFileName = dialog.FileName;
+
+				this.OnCollectionSave(sender, e);
+			}
 		}
 	}
 }

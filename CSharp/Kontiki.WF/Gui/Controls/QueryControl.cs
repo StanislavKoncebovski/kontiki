@@ -21,6 +21,8 @@ namespace Kontiki.WF.Gui.Controls
 {
 	public partial class QueryControl : UserControl
 	{
+		public event Action<Publication[]> PublicationsSelected;
+
 		public QueryControl()
 		{
 			InitializeComponent();
@@ -38,6 +40,12 @@ namespace Kontiki.WF.Gui.Controls
 
 		private void OnStartQuery(object sender, EventArgs e)
 		{
+			if (!KontikiForm.KontikiManager.ConnectionManager.WorkingConnection.IsOnline)
+			{
+				MessageBox.Show("Default connection is NOT online");
+				return;
+			}
+
 			if (this._cxPublicationType.SelectedItem.ToString() == "Book")
 			{
 				this.Cursor = Cursors.WaitCursor;
@@ -53,6 +61,13 @@ namespace Kontiki.WF.Gui.Controls
 
 				this.Cursor = Cursors.Default;
 			}
+		}
+
+		private void OnAddSelectedPublications(object sender, EventArgs e)
+		{
+			Publication[] selectedPublications	 = this._clbQueryResults.CheckedItems.OfType<Publication>().ToArray();
+
+			this.PublicationsSelected?.Invoke(selectedPublications);
 		}
 	}
 }

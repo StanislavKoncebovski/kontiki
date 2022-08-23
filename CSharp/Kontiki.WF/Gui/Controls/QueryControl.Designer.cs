@@ -127,6 +127,7 @@ namespace Kontiki.WF.Gui.Controls
 			this._btAddSelected.TabIndex = 8;
 			this._btAddSelected.Text = "&Add Selected";
 			this._btAddSelected.UseVisualStyleBackColor = true;
+			this._btAddSelected.Click += new System.EventHandler(this.OnAddSelectedPublications);
 			// 
 			// _btCancel
 			// 
