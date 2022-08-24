@@ -166,7 +166,7 @@ namespace Kontiki.WF
 			{
 				foreach (Publication publication in publications)
 				{
-					nodeSelected.Children.Add(new CollectionNode(publication));
+					nodeSelected.AddChild(new CollectionNode(publication));
 				}
 
 				this.OnSelectedNodeChanged(null, null);
@@ -211,7 +211,16 @@ namespace Kontiki.WF
 
 		private void PrepareKontikiConnection(string connectionName = "default")
 		{
-			KontikiManager.ConnectionManager.Load(_connectionFileName);
+			try
+			{
+				KontikiManager.ConnectionManager.Load(_connectionFileName);
+			}
+			catch (System.Exception)
+			{
+				MessageBox.Show($"Configuration file {_connectionFileName} not found");
+				return;
+			}
+			
 			KontikiConnection connection = KontikiManager.ConnectionManager.Connections[connectionName];
 			KontikiManager.ConnectionManager.TestConnection(connection);
 
@@ -251,7 +260,7 @@ namespace Kontiki.WF
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				CollectionNode child = new CollectionNode(dialog.ItemName, dialog.ItemDescription);
-				node.Children.Add(child);
+				node.AddChild(child);
 
 				this.DisplayCollectionFolders();
 			}
@@ -316,8 +325,12 @@ namespace Kontiki.WF
 					MessageBoxIcon.Question
 				) == DialogResult.OK)
 			{
-				// node.Children.Remove
-				// TODO: here you need to know the parent!
+				if (node.Parent != null)
+				{
+					node.Parent.RemoveChild(node);
+					this.DisplayCollectionFolders();
+					this._lbPublications.Items.Clear();
+				}
 			}
 		}
 	}

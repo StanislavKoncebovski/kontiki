@@ -20,25 +20,38 @@ namespace Kontiki.Collection
 	/// </summary>
 	public class CollectionNode
 	{
+		#region Private members
+		private CollectionNode			_parent		= null;
+		private List<CollectionNode>	_children	= new List<CollectionNode>();
+		#endregion
+
 		#region Properties
 		/// <summary>
 		/// Valid for Publication nodes
 		/// </summary>
-		public Publication	Publication			{get;set;}	= null;
+		public Publication			Publication			{get;set;}	= null;
 
 		/// <summary>
 		/// Valid for Folder nodes
 		/// </summary>
-		public string		FolderName			{get;set;}	= null;
+		public string				FolderName			{get;set;}	= null;
 
 		/// <summary>
 		/// Valid for Publication nodes (optional).
 		/// </summary>
-		public string		FolderDescription	{get;set;}	= null;
+		public string				FolderDescription	{get;set;}	= null;
 
-		public CollectionNode Parent			{get;set;}
+		public CollectionNode		Parent			
+		{
+			get {return this._parent;}
+		}
 
-		public List<CollectionNode> Children {get;internal set;} = new List<CollectionNode>();
+		public CollectionNode[]		Children
+		{
+			get {return this._children.ToArray();}
+		}
+
+		// public List<CollectionNode>	Children {get;internal set;} = new List<CollectionNode>();
 		public bool IsPublication
 		{
 			get {return this.Publication != null;}
@@ -63,6 +76,19 @@ namespace Kontiki.Collection
 		}
 		public CollectionNode(string folderName) : this(folderName, null) {}
 		public CollectionNode() {}
+		#endregion
+
+		#region Management
+		public void AddChild(CollectionNode node)
+		{
+			node._parent	= this;
+			this._children.Add(node);
+		}
+
+		public void RemoveChild(CollectionNode child)
+		{
+			this._children.Remove(child);
+		}
 		#endregion
 
 		#region XML
@@ -111,11 +137,12 @@ namespace Kontiki.Collection
 				node.FolderName			= x.Attribute("FolderName").Value;
 				node.FolderDescription	= x.Element("FolderDescription").Value;
 
-				XElement xChildren	= x.Element("Children");
+				XElement xChildren		= x.Element("Children");
 
 				foreach (XElement xChild in xChildren.Elements())
 				{
-					node.Children.Add(CollectionNode.FromXElement(xChild));
+					CollectionNode child = CollectionNode.FromXElement(xChild);
+					node.AddChild(child);
 				}
 			}
 
