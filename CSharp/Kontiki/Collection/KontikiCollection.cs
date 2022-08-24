@@ -6,6 +6,8 @@
 * Version:      1.0                                                                *
 * Copyright:    pikkatech.eu (www.pikkatech.eu)                                    *
 ***********************************************************************************/
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Kontiki.Collection
@@ -73,6 +75,32 @@ namespace Kontiki.Collection
 		public static KontikiCollection Load(string fileName)
 		{
 			return KontikiCollection.FromXElement(XElement.Load(fileName));
+		}
+		#endregion
+
+		#region Statistics
+		public Publication[] GetPublications()
+		{
+			List<Publication> publications = new List<Publication>();
+
+			this.GetPublications(publications, this.Root);
+
+			return publications.ToArray();
+		}
+
+		public string[] GetPublicationIds()
+		{
+			return this.GetPublications().Select(p => p.Id).ToArray();
+		}
+
+		private void GetPublications(List<Publication> publications, CollectionNode node)
+		{
+			publications.AddRange(node.Children.Where(c => c.IsPublication).Select(t => t.Publication));
+
+			foreach (CollectionNode child in node.Children)
+			{
+				GetPublications(publications, child);
+			}
 		}
 		#endregion
 	}

@@ -57,9 +57,11 @@
     <Compile Include="KontikiConnectionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publication.cs" />
+    <Compile Include="PublicationIdCreator.cs" />
     <Compile Include="PublicationType.cs.cs" />
     <Compile Include="QueryColumn.cs" />
     <Compile Include="ReturnFormat.cs" />
+    <Compile Include="Tools\StringExtensions.cs" />
     <Compile Include="Tools\Xml\XmlTools.AttributeValues.cs" />
     <Compile Include="Tools\Xml\XmlTools.cs" />
     <Compile Include="Tools\Xml\XmlTools.ElementValues.cs" />

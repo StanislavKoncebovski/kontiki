@@ -333,5 +333,36 @@ namespace Kontiki.WF
 				}
 			}
 		}
+
+		private void OnPublicationAdd(object sender, System.EventArgs e)
+		{
+			// Add publication manually
+		}
+
+		private void OnPublicationEdit(object sender, System.EventArgs e)
+		{
+			if (this._lbPublications.SelectedItem != null)
+			{
+				Publication publication = this._lbPublications.SelectedItem as Publication;
+			}
+		}
+
+		private void OnPublicationDelete(object sender, System.EventArgs e)
+		{
+			if (this._lbPublications.SelectedItem != null)
+			{
+				Publication publication = this._lbPublications.SelectedItem as Publication;
+
+				if (
+					MessageBox.Show($"Delete publication {publication} ?", 
+					"Publication to be deleted", 
+					MessageBoxButtons.OKCancel, 
+					MessageBoxIcon.Question
+				) == DialogResult.OK)
+				{
+					// TODO: find publication in the collection and delete it
+				}
+			}
+		}
 	}
 }

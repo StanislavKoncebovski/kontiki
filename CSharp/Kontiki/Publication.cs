@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Kontiki.Tools.Xml;
@@ -31,7 +32,7 @@ namespace Kontiki
 		/// <summary>
 		/// Kontiki's own ID.
 		/// </summary>
-		public int							Id					{get;set;}
+		public string						Id					{get;set;}
 		/// <summary>
 		/// LibGen's MD5. the unique identifier of a publication on LibGen
 		/// </summary>
@@ -258,7 +259,7 @@ namespace Kontiki
 			Publication publication = new Publication();
 
 			publication.PublicationType	= (PublicationType)x.GetAttributeEnum(typeof(PublicationType), "PublicationType", PublicationType.Unknown);
-			publication.Id				= x.GetAttributeValue<int>("Id");
+			publication.Id				= x.GetAttributeValue<string>("Id");
 			publication.Md5				= x.GetElementValue<string>("Md5");
 			publication.Title			= x.GetElementValue<string>("Title");
 			publication.Subtitle		= x.GetElementValue<string>("Subtitle");

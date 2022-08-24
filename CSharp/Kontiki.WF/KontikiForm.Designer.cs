@@ -48,6 +48,10 @@ namespace Kontiki.WF
 			this._tsKontiki = new System.Windows.Forms.ToolStrip();
 			this._scCollection = new System.Windows.Forms.SplitContainer();
 			this._tvCollection = new System.Windows.Forms.TreeView();
+			this._cmsCollection = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.newFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.editFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this._scQuery = new System.Windows.Forms.SplitContainer();
 			this._scPublications = new System.Windows.Forms.SplitContainer();
 			this._lbPublications = new System.Windows.Forms.ListBox();
@@ -55,16 +59,17 @@ namespace Kontiki.WF
 			this._tpPublicationBibTeX = new System.Windows.Forms.TabPage();
 			this._txPublicationBibTeX = new System.Windows.Forms.TextBox();
 			this._tpPublicationInstance = new System.Windows.Forms.TabPage();
+			this._cmsPublication = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.addPublicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.editPublicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.deletePublicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this._ctrlQuery = new Kontiki.WF.Gui.Controls.QueryControl();
-			this._cmsCollection = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.newFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.editFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.deleteFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this._msKontiki.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._scCollection)).BeginInit();
 			this._scCollection.Panel1.SuspendLayout();
 			this._scCollection.Panel2.SuspendLayout();
 			this._scCollection.SuspendLayout();
+			this._cmsCollection.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._scQuery)).BeginInit();
 			this._scQuery.Panel1.SuspendLayout();
 			this._scQuery.Panel2.SuspendLayout();
@@ -75,7 +80,7 @@ namespace Kontiki.WF
 			this._scPublications.SuspendLayout();
 			this._tcPublication.SuspendLayout();
 			this._tpPublicationBibTeX.SuspendLayout();
-			this._cmsCollection.SuspendLayout();
+			this._cmsPublication.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _msKontiki
@@ -109,54 +114,54 @@ namespace Kontiki.WF
 			// newToolStripMenuItem
 			// 
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.newToolStripMenuItem.Text = "&New";
 			this.newToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionNew);
 			// 
 			// editToolStripMenuItem
 			// 
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.editToolStripMenuItem.Text = "&Edit";
 			this.editToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionEdit);
 			// 
 			// closeToolStripMenuItem
 			// 
 			this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-			this.closeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.closeToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.closeToolStripMenuItem.Text = "&Close";
 			this.closeToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionClose);
 			// 
 			// loadToolStripMenuItem
 			// 
 			this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-			this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.loadToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.loadToolStripMenuItem.Text = "&Load";
 			this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionLoad);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.saveToolStripMenuItem.Text = "&Save";
 			this.saveToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionSave);
 			// 
 			// saveasToolStripMenuItem
 			// 
 			this.saveasToolStripMenuItem.Name = "saveasToolStripMenuItem";
-			this.saveasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.saveasToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.saveasToolStripMenuItem.Text = "Save &as";
 			this.saveasToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionSaveAs);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(129, 6);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
 			this.quitToolStripMenuItem.Text = "&Quit";
 			this.quitToolStripMenuItem.Click += new System.EventHandler(this.OnCollectionQuit);
 			// 
@@ -235,6 +240,37 @@ namespace Kontiki.WF
 			this._tvCollection.TabIndex = 0;
 			this._tvCollection.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnSelectedNodeChanged);
 			// 
+			// _cmsCollection
+			// 
+			this._cmsCollection.Font = new System.Drawing.Font("Consolas", 10F);
+			this._cmsCollection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newFolderToolStripMenuItem,
+            this.editFolderToolStripMenuItem,
+            this.deleteFolderToolStripMenuItem});
+			this._cmsCollection.Name = "_cmsCollection";
+			this._cmsCollection.Size = new System.Drawing.Size(181, 70);
+			// 
+			// newFolderToolStripMenuItem
+			// 
+			this.newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
+			this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.newFolderToolStripMenuItem.Text = "&New Folder";
+			this.newFolderToolStripMenuItem.Click += new System.EventHandler(this.OnFolderNew);
+			// 
+			// editFolderToolStripMenuItem
+			// 
+			this.editFolderToolStripMenuItem.Name = "editFolderToolStripMenuItem";
+			this.editFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.editFolderToolStripMenuItem.Text = "&Edit Folder";
+			this.editFolderToolStripMenuItem.Click += new System.EventHandler(this.OnFolderEdit);
+			// 
+			// deleteFolderToolStripMenuItem
+			// 
+			this.deleteFolderToolStripMenuItem.Name = "deleteFolderToolStripMenuItem";
+			this.deleteFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.deleteFolderToolStripMenuItem.Text = "&Delete Folder";
+			this.deleteFolderToolStripMenuItem.Click += new System.EventHandler(this.OnFolderDelete);
+			// 
 			// _scQuery
 			// 
 			this._scQuery.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -273,6 +309,7 @@ namespace Kontiki.WF
 			// 
 			// _lbPublications
 			// 
+			this._lbPublications.ContextMenuStrip = this._cmsPublication;
 			this._lbPublications.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._lbPublications.FormattingEnabled = true;
 			this._lbPublications.ItemHeight = 15;
@@ -328,6 +365,37 @@ namespace Kontiki.WF
 			this._tpPublicationInstance.Text = "All";
 			this._tpPublicationInstance.UseVisualStyleBackColor = true;
 			// 
+			// _cmsPublication
+			// 
+			this._cmsPublication.Font = new System.Drawing.Font("Consolas", 10F);
+			this._cmsPublication.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addPublicationToolStripMenuItem,
+            this.editPublicationToolStripMenuItem,
+            this.deletePublicationToolStripMenuItem});
+			this._cmsPublication.Name = "_cmsPublication";
+			this._cmsPublication.Size = new System.Drawing.Size(221, 92);
+			// 
+			// addPublicationToolStripMenuItem
+			// 
+			this.addPublicationToolStripMenuItem.Name = "addPublicationToolStripMenuItem";
+			this.addPublicationToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+			this.addPublicationToolStripMenuItem.Text = "&Add Publication";
+			this.addPublicationToolStripMenuItem.Click += new System.EventHandler(this.OnPublicationAdd);
+			// 
+			// editPublicationToolStripMenuItem
+			// 
+			this.editPublicationToolStripMenuItem.Name = "editPublicationToolStripMenuItem";
+			this.editPublicationToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+			this.editPublicationToolStripMenuItem.Text = "&Edit Publication";
+			this.editPublicationToolStripMenuItem.Click += new System.EventHandler(this.OnPublicationEdit);
+			// 
+			// deletePublicationToolStripMenuItem
+			// 
+			this.deletePublicationToolStripMenuItem.Name = "deletePublicationToolStripMenuItem";
+			this.deletePublicationToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+			this.deletePublicationToolStripMenuItem.Text = "&Delete Publication";
+			this.deletePublicationToolStripMenuItem.Click += new System.EventHandler(this.OnPublicationDelete);
+			// 
 			// _ctrlQuery
 			// 
 			this._ctrlQuery.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -337,37 +405,6 @@ namespace Kontiki.WF
 			this._ctrlQuery.Name = "_ctrlQuery";
 			this._ctrlQuery.Size = new System.Drawing.Size(463, 550);
 			this._ctrlQuery.TabIndex = 0;
-			// 
-			// _cmsCollection
-			// 
-			this._cmsCollection.Font = new System.Drawing.Font("Consolas", 10F);
-			this._cmsCollection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newFolderToolStripMenuItem,
-            this.editFolderToolStripMenuItem,
-            this.deleteFolderToolStripMenuItem});
-			this._cmsCollection.Name = "_cmsCollection";
-			this._cmsCollection.Size = new System.Drawing.Size(181, 92);
-			// 
-			// newFolderToolStripMenuItem
-			// 
-			this.newFolderToolStripMenuItem.Name = "newFolderToolStripMenuItem";
-			this.newFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.newFolderToolStripMenuItem.Text = "&New Folder";
-			this.newFolderToolStripMenuItem.Click += new System.EventHandler(this.OnFolderNew);
-			// 
-			// editFolderToolStripMenuItem
-			// 
-			this.editFolderToolStripMenuItem.Name = "editFolderToolStripMenuItem";
-			this.editFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.editFolderToolStripMenuItem.Text = "&Edit Folder";
-			this.editFolderToolStripMenuItem.Click += new System.EventHandler(this.OnFolderEdit);
-			// 
-			// deleteFolderToolStripMenuItem
-			// 
-			this.deleteFolderToolStripMenuItem.Name = "deleteFolderToolStripMenuItem";
-			this.deleteFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.deleteFolderToolStripMenuItem.Text = "&Delete Folder";
-			this.deleteFolderToolStripMenuItem.Click += new System.EventHandler(this.OnFolderDelete);
 			// 
 			// KontikiForm
 			// 
@@ -388,6 +425,7 @@ namespace Kontiki.WF
 			this._scCollection.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._scCollection)).EndInit();
 			this._scCollection.ResumeLayout(false);
+			this._cmsCollection.ResumeLayout(false);
 			this._scQuery.Panel1.ResumeLayout(false);
 			this._scQuery.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._scQuery)).EndInit();
@@ -399,7 +437,7 @@ namespace Kontiki.WF
 			this._tcPublication.ResumeLayout(false);
 			this._tpPublicationBibTeX.ResumeLayout(false);
 			this._tpPublicationBibTeX.PerformLayout();
-			this._cmsCollection.ResumeLayout(false);
+			this._cmsPublication.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -437,6 +475,10 @@ namespace Kontiki.WF
 		private System.Windows.Forms.ToolStripMenuItem newFolderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem editFolderToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem deleteFolderToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip _cmsPublication;
+		private System.Windows.Forms.ToolStripMenuItem addPublicationToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem editPublicationToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem deletePublicationToolStripMenuItem;
 	}
 }
 
