@@ -120,7 +120,7 @@ namespace Kontiki
 					break;
 			}
 
-			string result = $"@{publicationType}{{{this.PublicationType.ToString().ToLower()}_{this.Id},\r\n";
+			string result = $"@{publicationType}{{{this.Id},\r\n";
 
 			PropertyInfo[] properties = typeof(Publication).GetProperties();
 

@@ -45,6 +45,7 @@ namespace Kontiki.WF
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				this._collection = new KontikiCollection(dialog.ItemName, dialog.ItemDescription);
+				PublicationIdCreator.Collection = this._collection;
 			}
 		}
 
@@ -65,6 +66,7 @@ namespace Kontiki.WF
 			{
 				this._collection.Name			= dialog.ItemName;
 				this._collection.Description	= dialog.ItemDescription;
+				PublicationIdCreator.Collection = this._collection;
 			}
 		}
 
@@ -77,6 +79,7 @@ namespace Kontiki.WF
 
 			// TODO ask for saving
 			this._collection = null;
+			PublicationIdCreator.Collection = this._collection;
 		}
 
 		private void OnCollectionLoad(object sender, System.EventArgs e)
@@ -88,6 +91,7 @@ namespace Kontiki.WF
 			{
 				this._collectionFileName	= dialog.FileName;
 				this._collection			= KontikiCollection.Load(this._collectionFileName);
+				PublicationIdCreator.Collection = this._collection;
 				this.DisplayCollectionFolders();
 			}
 		}
@@ -166,6 +170,7 @@ namespace Kontiki.WF
 			{
 				foreach (Publication publication in publications)
 				{
+					publication.Id	= PublicationIdCreator.CreateId(publication);
 					nodeSelected.AddChild(new CollectionNode(publication));
 				}
 

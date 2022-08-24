@@ -10,27 +10,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Kontiki.Collection;
 using Kontiki.Tools;
 
 namespace Kontiki
 {
 	public static class PublicationIdCreator
 	{
+		#region Public Properties
+		public static KontikiCollection Collection {get;set;} = null;
+		#endregion
+
 		public static string CreateId(Publication publication)
 		{
-			string author = String.IsNullOrEmpty(publication.Author)? "sine_nomine" : publication.Author;
-			string address = String.IsNullOrEmpty(publication.Address)? "sine_loco" : publication.Address;
-			string year = String.IsNullOrEmpty(publication.Year)? "sine_anno" : publication.Year;
+			string author	= GetPrimaryAuthor(publication.Author);
+			string address	= String.IsNullOrEmpty(publication.Address)? "sl" : publication.Address;
+			string year		= String.IsNullOrEmpty(publication.Year)? "sa" : publication.Year;
 
-			return "";
+			string result	= $"{author}_{year}";
+
+			if (Collection != null)
+			{
+				string[] ids = Collection.GetPublicationIds();
+
+				if (ids.Contains(result))
+				{
+					string[] ids_subset = ids.Where(i => i.StartsWith(result)).ToArray();
+					result = result += $"_{ids_subset.Length}";
+				}
+			}
+
+			return result;
 		}
 
-		public static string GetPrimaryAuthor(string authors)
+		private static string GetPrimaryAuthor(string authors)
 		{
 			if (authors.Length <= 2)
 			{
-				return "sine_nomine";
+				return "sn";
 			}
 
 			string[] items = authors.Split(',');
@@ -54,12 +73,12 @@ namespace Kontiki
 				}
 				else
 				{
-					return "sine_nomine";
+					return "sn";
 				}
 			}
 			else
 			{
-				return "sine_nomine";
+				return "sn";
 			}
 		}
 	}

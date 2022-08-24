@@ -35,9 +35,18 @@ namespace Kontiki.UnitTests
 				"Laurent Abramowitz, Matthieu Allez, Franck Devulder, Jean-Luc Faucheron, Roland Ganansia, Denis Soudan, Anne-Laure Tarrerias (auth.)",
 			};
 
-			foreach (string author_string in author_strings)
+			Publication[] publications = new Publication[]
 			{
-				string primaryAuthor = PublicationIdCreator.GetPrimaryAuthor(author_string);
+				new Publication{PublicationType = PublicationType.Book, Author = author_strings[2], Title = "Test", Year = "1967"},
+				new Publication{PublicationType = PublicationType.Book, Author = author_strings[3], Title = "Test", Year = "1977"},
+				new Publication{PublicationType = PublicationType.Book, Author = author_strings[6], Title = "Test", Year = "1987"},
+				new Publication{PublicationType = PublicationType.Book, Author = author_strings[7], Title = "Test", Year = "1997"},
+				new Publication{PublicationType = PublicationType.Book, Author = author_strings[9], Title = "Test", Year = ""},
+			};
+
+			foreach (Publication publication in publications)
+			{
+				string primaryAuthor = PublicationIdCreator.CreateId(publication);
 			}
 		}
 	}
