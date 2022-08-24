@@ -9,17 +9,23 @@
 using System.Linq;
 using System.Windows.Forms;
 using Kontiki.Collection;
+using Kontiki.WF.Gui.Dialogs;
 
 namespace Kontiki.WF
 {
 	public partial class KontikiForm : Form
 	{
+		#region Private Members
 		private static string _connectionFileName		= "kontiki_connections.xml";
-		public static HapKontikiManager KontikiManager	= new HapKontikiManager();
-
 		private KontikiCollection	_collection			= null;
 		private string				_collectionFileName = null;
+		#endregion
 
+		#region Inernal members
+		internal static HapKontikiManager KontikiManager	= new HapKontikiManager();
+		#endregion
+
+		#region Construction
 		public KontikiForm()
 		{
 			InitializeComponent();
@@ -28,45 +34,49 @@ namespace Kontiki.WF
 
 			this.PrepareKontikiConnection();
 		}
+		#endregion
 
-		private void OnQueryPublicationsSelected(Publication[] publications)
+		#region Menu event handlers
+		private void OnCollectionNew(object sender, System.EventArgs e)
 		{
-			if (this._tvCollection.SelectedNode == null)
+			ItemPropertiesDialog dialog = new ItemPropertiesDialog();
+			dialog.Text = "Collection Properties";
+
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				this._collection = new KontikiCollection(dialog.ItemName, dialog.ItemDescription);
+			}
+		}
+
+		private void OnCollectionEdit(object sender, System.EventArgs e)
+		{
+			if (this._collection == null)
 			{
 				return;
 			}
 
-			CollectionNode nodeSelected = this._tvCollection.SelectedNode.Tag as CollectionNode;
+			ItemPropertiesDialog dialog = new ItemPropertiesDialog();
+			dialog.Text = "Collection Properties";
 
-			if (nodeSelected.IsFolder)
-			{
-				foreach (Publication publication in publications)
-				{
-					nodeSelected.Children.Add(new CollectionNode(publication));
-				}
+			dialog.ItemName	= this._collection.Name;
+			dialog.ItemDescription	= this._collection.Description;
 
-				this.OnSelectedNodeChanged(null, null);
-			}
-		}
-		private void PrepareKontikiConnection(string connectionName = "default")
-		{
-			KontikiManager.ConnectionManager.Load(_connectionFileName);
-			KontikiConnection connection = KontikiManager.ConnectionManager.Connections[connectionName];
-			KontikiManager.ConnectionManager.TestConnection(connection);
-
-			if (connection.IsOnline)
+			if (dialog.ShowDialog() == DialogResult.OK)
 			{
-				MessageBox.Show($"Connection {connectionName} is online");
-			}
-			else
-			{
-				MessageBox.Show($"Connection {connectionName} is NOT online");
+				this._collection.Name			= dialog.ItemName;
+				this._collection.Description	= dialog.ItemDescription;
 			}
 		}
 
-		private void OnCollectionNew(object sender, System.EventArgs e)
+		private void OnCollectionClose(object sender, System.EventArgs e)
 		{
-			this._collection	= new KontikiCollection("aaa", "ddd");
+			if (this._collection == null)
+			{
+				return;
+			}
+
+			// TODO ask for saving
+			this._collection = null;
 		}
 
 		private void OnCollectionLoad(object sender, System.EventArgs e)
@@ -87,38 +97,34 @@ namespace Kontiki.WF
 			this.Close();
 		}
 
-		private void DisplayCollectionFolders()
+		private void OnCollectionSave(object sender, System.EventArgs e)
 		{
-			this._tvCollection.Nodes.Clear();
-
-			TreeNode tnRoot = this.CreateCollectionTreeNode(_collection.Root);
-
-			this._tvCollection.Nodes.Add(tnRoot);
+			if (string.IsNullOrEmpty(this._collectionFileName))
+			{
+				this.OnCollectionSaveAs(sender, e);
+			}
+			else
+			{
+				this._collection.Save(this._collectionFileName);
+			}
 		}
 
-		private TreeNode CreateCollectionTreeNode(CollectionNode node)
+		private void OnCollectionSaveAs(object sender, System.EventArgs e)
 		{
-			if (node.IsPublication)
+			SaveFileDialog dialog = new SaveFileDialog();
+
+			dialog.Filter = "Kontiki collection files (*.kontiki)|*.kontiki";
+
+			if (dialog.ShowDialog() == DialogResult.OK)
 			{
-				return null;
+				this._collectionFileName = dialog.FileName;
+
+				this.OnCollectionSave(sender, e);
 			}
-
-			TreeNode tnFolder	= new TreeNode(node.FolderName);
-			tnFolder.Tag		= node;
-
-			foreach (CollectionNode child in node.Children)
-			{
-				TreeNode tnChild = this.CreateCollectionTreeNode(child);
-
-				if (tnChild != null)
-				{
-					tnFolder.Nodes.Add(tnChild);
-				}
-			}
-
-			return tnFolder;
 		}
+		#endregion
 
+		#region GUI event handlers
 		private void OnSelectedNodeChanged(object sender, TreeViewEventArgs e)
 		{
 			if (this._tvCollection.SelectedNode != null)
@@ -147,29 +153,171 @@ namespace Kontiki.WF
 			}
 		}
 
-		private void OnCollectionSave(object sender, System.EventArgs e)
+		private void OnQueryPublicationsSelected(Publication[] publications)
 		{
-			if (string.IsNullOrEmpty(this._collectionFileName))
+			if (this._tvCollection.SelectedNode == null)
 			{
-				this.OnCollectionSaveAs(sender, e);
+				return;
+			}
+
+			CollectionNode nodeSelected = this._tvCollection.SelectedNode.Tag as CollectionNode;
+
+			if (nodeSelected.IsFolder)
+			{
+				foreach (Publication publication in publications)
+				{
+					nodeSelected.Children.Add(new CollectionNode(publication));
+				}
+
+				this.OnSelectedNodeChanged(null, null);
+			}
+		}
+		#endregion
+
+		#region Private auxiliary
+		private void DisplayCollectionFolders()
+		{
+			this._tvCollection.Nodes.Clear();
+
+			TreeNode tnRoot = this.CreateCollectionTreeNode(_collection.Root);
+
+			this._tvCollection.Nodes.Add(tnRoot);
+
+			this._tvCollection.ExpandAll();
+		}
+
+		private TreeNode CreateCollectionTreeNode(CollectionNode node)
+		{
+			if (node.IsPublication)
+			{
+				return null;
+			}
+
+			TreeNode tnFolder	= new TreeNode(node.FolderName);
+			tnFolder.Tag		= node;
+
+			foreach (CollectionNode child in node.Children)
+			{
+				TreeNode tnChild = this.CreateCollectionTreeNode(child);
+
+				if (tnChild != null)
+				{
+					tnFolder.Nodes.Add(tnChild);
+				}
+			}
+
+			return tnFolder;
+		}
+
+		private void PrepareKontikiConnection(string connectionName = "default")
+		{
+			KontikiManager.ConnectionManager.Load(_connectionFileName);
+			KontikiConnection connection = KontikiManager.ConnectionManager.Connections[connectionName];
+			KontikiManager.ConnectionManager.TestConnection(connection);
+
+			if (connection.IsOnline)
+			{
+				MessageBox.Show($"Connection {connectionName} is online");
 			}
 			else
 			{
-				this._collection.Save(this._collectionFileName);
+				MessageBox.Show($"Connection {connectionName} is NOT online");
 			}
 		}
+		#endregion
 
-		private void OnCollectionSaveAs(object sender, System.EventArgs e)
+		private void OnFolderNew(object sender, System.EventArgs e)
 		{
-			SaveFileDialog dialog = new SaveFileDialog();
+			if (this._collection == null)
+			{
+				return;
+			}
 
-			dialog.Filter = "Kontiki collection files (*.kontiki)|*.kontiki";
+			if (this._tvCollection.SelectedNode == null)
+			{
+				return;
+			}
+
+			CollectionNode node = this._tvCollection.SelectedNode.Tag as CollectionNode;
+
+			if (!node.IsFolder)
+			{
+				return;
+			}
+
+			ItemPropertiesDialog dialog = new ItemPropertiesDialog();
+			dialog.Text = "Folder Properties";
 
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
-				this._collectionFileName = dialog.FileName;
+				CollectionNode child = new CollectionNode(dialog.ItemName, dialog.ItemDescription);
+				node.Children.Add(child);
 
-				this.OnCollectionSave(sender, e);
+				this.DisplayCollectionFolders();
+			}
+		}
+
+		private void OnFolderEdit(object sender, System.EventArgs e)
+		{
+			if (this._collection == null)
+			{
+				return;
+			}
+
+			if (this._tvCollection.SelectedNode == null)
+			{
+				return;
+			}
+
+			CollectionNode node = this._tvCollection.SelectedNode.Tag as CollectionNode;
+
+			if (!node.IsFolder)
+			{
+				return;
+			}
+
+			ItemPropertiesDialog dialog = new ItemPropertiesDialog();
+			dialog.Text				= "Folder Properties";
+			dialog.ItemName			= node.FolderName;
+			dialog.ItemDescription	= node.FolderDescription;
+
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				node.FolderName			= dialog.ItemName;
+				node.FolderDescription	= dialog.ItemDescription;
+
+				this.DisplayCollectionFolders();
+			}
+		}
+
+		private void OnFolderDelete(object sender, System.EventArgs e)
+		{
+			if (this._collection == null)
+			{
+				return;
+			}
+
+			if (this._tvCollection.SelectedNode == null)
+			{
+				return;
+			}
+
+			CollectionNode node = this._tvCollection.SelectedNode.Tag as CollectionNode;
+
+			if (!node.IsFolder)
+			{
+				return;
+			}
+
+			if (
+					MessageBox.Show($"Delete folder {node.FolderName} with all its contents?", 
+					"Folder to be deleted", 
+					MessageBoxButtons.OKCancel, 
+					MessageBoxIcon.Question
+				) == DialogResult.OK)
+			{
+				// node.Children.Remove
+				// TODO: here you need to know the parent!
 			}
 		}
 	}
