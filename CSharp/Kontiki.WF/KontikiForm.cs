@@ -421,5 +421,36 @@ namespace Kontiki.WF
 				}
 			}
 		}
+
+		private void OnExportToClipboardAsBibTeX(object sender, System.EventArgs e)
+		{
+			if (this._collection == null)
+			{
+				return;
+			}
+
+			if (this._lbPublications.SelectedItem != null)
+			{
+				Publication publication = this._lbPublications.SelectedItem as Publication;
+
+				string bibTeX = publication.ToBibTeX();
+
+				Clipboard.SetText(bibTeX);
+			}
+		}
+
+		private void OnPublicationsMouseDown(object sender, MouseEventArgs e)
+		{
+			Publication publication = this._lbPublications.SelectedItem as Publication;
+
+			string bibTeX = publication.ToBibTeX();
+
+			this._lbPublications.DoDragDrop(bibTeX, DragDropEffects.Move);
+		}
+
+		private void OnPublicationsDragOver(object sender, DragEventArgs e)
+		{
+			e.Effect = DragDropEffects.Move;
+		}
 	}
 }
