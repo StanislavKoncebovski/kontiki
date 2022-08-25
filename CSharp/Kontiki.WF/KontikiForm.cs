@@ -14,6 +14,7 @@ using Kontiki.WF.Gui.Dialogs;
 namespace Kontiki.WF
 {
 	/// <summary>
+	/// Main Window of the Kontiki application.
 	/// Icon used:
 	/// "article", "documents" by shaurya from https://thenounproject.com/ .
 	/// "Book" by Oksana Latysheva from https://thenounproject.com/ .
@@ -154,7 +155,7 @@ namespace Kontiki.WF
 			foreach (CollectionNode child in node.Children.Where(c => c.IsPublication))
 			{
 				ListViewItem lvi	= new ListViewItem(new string[]{child.Publication.Id, child.Publication.Author, child.Publication.Title, child.Publication.Year});
-				lvi.Tag				= child;
+				lvi.Tag				= child.Publication;
 
 				if (child.Publication.PublicationType == PublicationType.Book)
 				{
@@ -210,70 +211,6 @@ namespace Kontiki.WF
 				this.OnSelectedNodeChanged(null, null);
 			}
 		}
-		#endregion
-
-		#region Private auxiliary
-		private void DisplayCollectionFolders()
-		{
-			this._tvCollection.Nodes.Clear();
-
-			TreeNode tnRoot = this.CreateCollectionTreeNode(_collection.Root);
-
-			this._tvCollection.Nodes.Add(tnRoot);
-
-			this._tvCollection.ExpandAll();
-		}
-
-		private TreeNode CreateCollectionTreeNode(CollectionNode node)
-		{
-			if (node.IsPublication)
-			{
-				return null;
-			}
-
-			TreeNode tnFolder			= new TreeNode(node.FolderName);
-			tnFolder.Tag				= node;
-			tnFolder.ImageKey			= "Folder";
-			tnFolder.SelectedImageKey	= "Folder";
-
-			foreach (CollectionNode child in node.Children)
-			{
-				TreeNode tnChild = this.CreateCollectionTreeNode(child);
-
-				if (tnChild != null)
-				{
-					tnFolder.Nodes.Add(tnChild);
-				}
-			}
-
-			return tnFolder;
-		}
-
-		private void PrepareKontikiConnection(string connectionName = "default")
-		{
-			try
-			{
-				KontikiManager.ConnectionManager.Load(_connectionFileName);
-			}
-			catch (System.Exception)
-			{
-				MessageBox.Show($"Configuration file {_connectionFileName} not found");
-				return;
-			}
-			
-			KontikiConnection connection = KontikiManager.ConnectionManager.Connections[connectionName];
-			KontikiManager.ConnectionManager.TestConnection(connection);
-
-			if (connection.IsOnline)
-			{
-				MessageBox.Show($"Connection {connectionName} is online");
-			}
-			else
-			{
-				MessageBox.Show($"Connection {connectionName} is NOT online");
-			}
-		}
-		#endregion
 
 		private void OnFolderNew(object sender, System.EventArgs e)
 		{
@@ -493,5 +430,69 @@ namespace Kontiki.WF
 		{
 			e.Effect = DragDropEffects.Move;
 		}
+		#endregion
+
+		#region Private auxiliary
+		private void DisplayCollectionFolders()
+		{
+			this._tvCollection.Nodes.Clear();
+
+			TreeNode tnRoot = this.CreateCollectionTreeNode(_collection.Root);
+
+			this._tvCollection.Nodes.Add(tnRoot);
+
+			this._tvCollection.ExpandAll();
+		}
+
+		private TreeNode CreateCollectionTreeNode(CollectionNode node)
+		{
+			if (node.IsPublication)
+			{
+				return null;
+			}
+
+			TreeNode tnFolder			= new TreeNode(node.FolderName);
+			tnFolder.Tag				= node;
+			tnFolder.ImageKey			= "Folder";
+			tnFolder.SelectedImageKey	= "Folder";
+
+			foreach (CollectionNode child in node.Children)
+			{
+				TreeNode tnChild = this.CreateCollectionTreeNode(child);
+
+				if (tnChild != null)
+				{
+					tnFolder.Nodes.Add(tnChild);
+				}
+			}
+
+			return tnFolder;
+		}
+
+		private void PrepareKontikiConnection(string connectionName = "default")
+		{
+			try
+			{
+				KontikiManager.ConnectionManager.Load(_connectionFileName);
+			}
+			catch (System.Exception)
+			{
+				MessageBox.Show($"Configuration file {_connectionFileName} not found");
+				return;
+			}
+			
+			KontikiConnection connection = KontikiManager.ConnectionManager.Connections[connectionName];
+			KontikiManager.ConnectionManager.TestConnection(connection);
+
+			if (connection.IsOnline)
+			{
+				MessageBox.Show($"Connection {connectionName} is online");
+			}
+			else
+			{
+				MessageBox.Show($"Connection {connectionName} is NOT online");
+			}
+		}
+		#endregion
 	}
 }

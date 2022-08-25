@@ -101,6 +101,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -120,6 +121,21 @@
       <Project>{d4a4f7ac-8097-49bc-9f96-3f0ae9de9451}</Project>
       <Name>Kontiki</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Quit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionLoad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionNew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionSave.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
