@@ -159,6 +159,7 @@ namespace Kontiki.WF
 			if (publication != null)
 			{
 				this._txPublicationBibTeX.Text = publication.ToBibTeX();
+				this._ctrlPublication.Publication	= publication;
 			}
 		}
 
