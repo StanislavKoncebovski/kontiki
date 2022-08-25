@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -23,61 +24,107 @@ namespace Kontiki
 	/// </summary>
 	public class Publication
 	{
-		#region Private ststic members
+		#region Private static members
 		private static List<string>			_fieldsRestricted = new List<string>{"Md5"};
 		#endregion
 
 		#region Properties
+		[Category("1. General Properties")]
 		public PublicationType				PublicationType		{get;set;}
+
 		/// <summary>
 		/// Kontiki's own ID.
 		/// </summary>
+		[Category("1. General Properties")]
 		public string						Id					{get;set;}
+
 		/// <summary>
 		/// LibGen's MD5. the unique identifier of a publication on LibGen
 		/// </summary>
+		[Category("4. Additional Properties")]
 		public string						Md5					{get;set;}
+
+		[Category("1. General Properties")]
 		public string						Title				{get;set;}
+
+		[Category("1. General Properties")]
 		public string						Subtitle			{get;set;}
+
+		[Category("1. General Properties")]
 		public string						Author				{get;set;}
+
+		[Category("3. Article Properties")]
 		public string						Volume				{get;set;}
 		/// <summary>
 		/// For articles.
 		/// </summary>
-		public string						Number				{get;set;}      
+		[Category("3. Article Properties")]
+		public string						Number				{get;set;}
+		
+		[Category("2. Book Properties")]
 		public string						Series				{get;set;}
+
+		[Category("1. General Properties")]
 		public string						Year				{get;set;}
 		
 		/// <summary>
 		/// For articles.
 		/// </summary>
-		public string						Month				{get;set;}       
+		[Category("3. Article Properties")]
+		public string						Month				{get;set;}
+		
+		[Category("2. Book Properties")]
 		public string						Edition				{get;set;}
+
+		[Category("2. Book Properties")]
 		public string						Publisher			{get;set;}
+
+		[Category("2. Book Properties")]
 		public string						Address				{get;set;}    
 
 		/// <summary>
 		/// For books.
 		/// </summary>
+		[Category("2. Book Properties")]
 		public string						Pagetotal			{get;set;}
 
 		/// <summary>
 		/// For articles.
 		/// </summary>
+		[Category("3. Article Properties")]
 		public string						Journal				{get;set;}
 		
 		/// <summary>
 		/// For articles.
 		/// </summary>
-		public string						Pages				{get;set;}       
+		[Category("3. Article Properties")]
+		public string						Pages				{get;set;} 
+		
+		[Category("3. Article Properties")]
 		public string						Issue				{get;set;}
+
+		[Category("2. Book Properties")]
 		public string						Isbn				{get;set;}
+
+		[Category("3. Article Properties")]
 		public string						Issn				{get;set;}
+
+		[Category("1. General Properties")]
 		public string						Doi					{get;set;}
+
+		[Category("4. Additional Properties")]
 		public string						Language			{get;set;}
+
+		[Category("4. Additional Properties")]
 		public string						Note				{get;set;}
+
+		[Category("4. Additional Properties")]
 		public string						Url					{get;set;}
+
+		[Category("4. Additional Properties")]
 		public string						UrlDate				{get;set;}
+
+		[Category("4. Additional Properties")]
 		public string						Abstract			{get;set;}
 
 		/// <summary>
@@ -89,6 +136,7 @@ namespace Kontiki
 		///		 ddc: the text's Dewey Decimal Classification number
 		///		 lcc: the text's Library of Congress Classification number
 		/// </summary>
+		[Category("4. Additional Properties")]
 		public Dictionary<string, string>	ForeignIdentifiers	{get;set;} = new Dictionary<string, string>();
 		#endregion
 

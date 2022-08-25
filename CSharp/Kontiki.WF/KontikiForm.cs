@@ -346,7 +346,23 @@ namespace Kontiki.WF
 
 		private void OnPublicationAdd(object sender, System.EventArgs e)
 		{
-			// Add publication manually
+			PublicationDialog dialog	= new PublicationDialog();
+			dialog.Publication			= new Publication();
+
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				Publication publication	= dialog.Publication;
+
+				CollectionNode nodeSelected = this._tvCollection.SelectedNode.Tag as CollectionNode;
+
+				if (nodeSelected.IsFolder)
+				{
+					publication.Id	= PublicationIdCreator.CreateId(publication);
+					nodeSelected.AddChild(new CollectionNode(publication));
+
+					this.OnSelectedNodeChanged(null, null);
+				}
+			}
 		}
 
 		private void OnPublicationEdit(object sender, System.EventArgs e)

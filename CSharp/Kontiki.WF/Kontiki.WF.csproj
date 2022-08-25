@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gui\Controls\PublicationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gui\Controls\PublicationControl.Designer.cs">
+      <DependentUpon>PublicationControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gui\Controls\QueryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -58,6 +64,12 @@
     <Compile Include="Gui\Dialogs\ItemPropertiesDialog.Designer.cs">
       <DependentUpon>ItemPropertiesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gui\Dialogs\PublicationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\Dialogs\PublicationDialog.Designer.cs">
+      <DependentUpon>PublicationDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="KontikiForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,11 +78,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Gui\Controls\PublicationControl.resx">
+      <DependentUpon>PublicationControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Gui\Controls\QueryControl.resx">
       <DependentUpon>QueryControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\Dialogs\ItemPropertiesDialog.resx">
       <DependentUpon>ItemPropertiesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Dialogs\PublicationDialog.resx">
+      <DependentUpon>PublicationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KontikiForm.resx">
       <DependentUpon>KontikiForm.cs</DependentUpon>
