@@ -318,7 +318,7 @@ namespace Kontiki.WF
 			this._lbPublications.Name = "_lbPublications";
 			this._lbPublications.Size = new System.Drawing.Size(530, 288);
 			this._lbPublications.TabIndex = 0;
-			this._lbPublications.SelectedIndexChanged += new System.EventHandler(this.OnPublicstionSelected);
+			this._lbPublications.SelectedIndexChanged += new System.EventHandler(this.OnPublicationSelected);
 			// 
 			// _tcPublication
 			// 

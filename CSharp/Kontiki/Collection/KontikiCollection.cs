@@ -102,6 +102,11 @@ namespace Kontiki.Collection
 				GetPublications(publications, child);
 			}
 		}
+
+		public CollectionNode FindPublicationNode(string id)
+		{
+			return CollectionNode.FindPublicationNode(this.Root, id);
+		}
 		#endregion
 	}
 }

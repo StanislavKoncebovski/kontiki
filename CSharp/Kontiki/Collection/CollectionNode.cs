@@ -89,6 +89,26 @@ namespace Kontiki.Collection
 		{
 			this._children.Remove(child);
 		}
+
+		internal static CollectionNode FindPublicationNode(CollectionNode node, string id)
+		{
+			if (node.IsPublication && node.Publication.Id == id)
+			{
+				return node;
+			}
+
+			foreach (CollectionNode child in node.Children)
+			{
+				CollectionNode found = FindPublicationNode(child, id);
+
+				if (found != null)
+				{
+					return found;
+				}
+			}
+
+			return null;
+		}
 		#endregion
 
 		#region XML

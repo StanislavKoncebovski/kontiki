@@ -137,17 +137,22 @@ namespace Kontiki.WF
 
 				if (node.IsFolder)
 				{
-					this._lbPublications.Items.Clear();
-
-					foreach (CollectionNode child in node.Children.Where(c => c.IsPublication))
-					{
-						this._lbPublications.Items.Add(child.Publication);
-					}
+					this.DisplayNodePublications(node);
 				}
 			}
 		}
 
-		private void OnPublicstionSelected(object sender, System.EventArgs e)
+		private void DisplayNodePublications(CollectionNode node)
+		{
+			this._lbPublications.Items.Clear();
+
+			foreach (CollectionNode child in node.Children.Where(c => c.IsPublication))
+			{
+				this._lbPublications.Items.Add(child.Publication);
+			}
+		}
+
+		private void OnPublicationSelected(object sender, System.EventArgs e)
 		{
 			Publication publication = this._lbPublications.SelectedItem as Publication;
 
@@ -354,6 +359,11 @@ namespace Kontiki.WF
 
 		private void OnPublicationDelete(object sender, System.EventArgs e)
 		{
+			if (this._collection == null)
+			{
+				return;
+			}
+
 			if (this._lbPublications.SelectedItem != null)
 			{
 				Publication publication = this._lbPublications.SelectedItem as Publication;
@@ -365,7 +375,15 @@ namespace Kontiki.WF
 					MessageBoxIcon.Question
 				) == DialogResult.OK)
 				{
-					// TODO: find publication in the collection and delete it
+					CollectionNode node = this._collection.FindPublicationNode(publication.Id);
+
+					CollectionNode parent = node.Parent;
+
+					node.Parent.RemoveChild(node);
+
+					this.DisplayNodePublications(parent);
+
+					this._txPublicationBibTeX.Clear();
 				}
 			}
 		}
