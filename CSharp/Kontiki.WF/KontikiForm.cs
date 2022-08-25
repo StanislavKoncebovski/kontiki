@@ -13,6 +13,11 @@ using Kontiki.WF.Gui.Dialogs;
 
 namespace Kontiki.WF
 {
+	/// <summary>
+	/// Icon used:
+	/// "article", "documents" by shaurya from https://thenounproject.com/ .
+	/// "Book" by Oksana Latysheva from https://thenounproject.com/ .
+	/// </summary>
 	public partial class KontikiForm : Form
 	{
 		#region Private Members
@@ -144,22 +149,44 @@ namespace Kontiki.WF
 
 		private void DisplayNodePublications(CollectionNode node)
 		{
-			this._lbPublications.Items.Clear();
+			this._lvPublications.Items.Clear();
 
 			foreach (CollectionNode child in node.Children.Where(c => c.IsPublication))
 			{
-				this._lbPublications.Items.Add(child.Publication);
+				ListViewItem lvi	= new ListViewItem(new string[]{child.Publication.Id, child.Publication.Author, child.Publication.Title, child.Publication.Year});
+				lvi.Tag				= child;
+
+				if (child.Publication.PublicationType == PublicationType.Book)
+				{
+					lvi.ImageKey	= "Book";
+				}
+				else if (child.Publication.PublicationType == PublicationType.Article)
+				{
+					lvi.ImageKey	= "Article";
+				}
+
+				this._lvPublications.Items.Add(lvi);
 			}
+
+			int width = this._lvPublications.Width;
+			this._lvPublications.Columns[1].Width	= width / 2;
+			this._lvPublications.Columns[2].Width	= width / 2;
+
+			this._lvPublications.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
+			this._lvPublications.AutoResizeColumn(3, ColumnHeaderAutoResizeStyle.ColumnContent);
 		}
 
 		private void OnPublicationSelected(object sender, System.EventArgs e)
 		{
-			Publication publication = this._lbPublications.SelectedItem as Publication;
-
-			if (publication != null)
+			if (this._lvPublications.SelectedItems.Count == 1)
 			{
-				this._txPublicationBibTeX.Text = publication.ToBibTeX();
-				this._ctrlPublication.Publication	= publication;
+				Publication publication = this._lvPublications.SelectedItems[0].Tag as Publication;
+
+				if (publication != null)
+				{
+					this._txPublicationBibTeX.Text = publication.ToBibTeX();
+					this._ctrlPublication.Publication	= publication;
+				}
 			}
 		}
 
@@ -342,7 +369,7 @@ namespace Kontiki.WF
 				{
 					node.Parent.RemoveChild(node);
 					this.DisplayCollectionFolders();
-					this._lbPublications.Items.Clear();
+					this._lvPublications.Items.Clear();
 				}
 			}
 		}
@@ -370,25 +397,27 @@ namespace Kontiki.WF
 
 		private void OnPublicationEdit(object sender, System.EventArgs e)
 		{
-			if (this._lbPublications.SelectedItem != null)
+			if (this._lvPublications.SelectedItems.Count != 1)
 			{
-				Publication publication = this._lbPublications.SelectedItem as Publication;
+				return;
+			}
 
-				PublicationDialog dialog	= new PublicationDialog();
-				dialog.Publication			= publication;
+			Publication publication = this._lvPublications.SelectedItems[0].Tag as Publication;
 
-				if (dialog.ShowDialog() == DialogResult.OK)
+			PublicationDialog dialog	= new PublicationDialog();
+			dialog.Publication			= publication;
+
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				publication	= dialog.Publication;
+				CollectionNode nodeSelected = this._tvCollection.SelectedNode.Tag as CollectionNode;
+				CollectionNode publicationNode = nodeSelected.Children.FirstOrDefault(c=>c.Publication.Id == publication.Id);
+
+				if (publicationNode != null)
 				{
-					publication	= dialog.Publication;
-					CollectionNode nodeSelected = this._tvCollection.SelectedNode.Tag as CollectionNode;
-					CollectionNode publicationNode = nodeSelected.Children.FirstOrDefault(c=>c.Publication.Id == publication.Id);
-
-					if (publicationNode != null)
-					{
-						nodeSelected.RemoveChild(publicationNode);
-						nodeSelected.AddChild(new CollectionNode(publication));
-						this.DisplayNodePublications(nodeSelected);
-					}
+					nodeSelected.RemoveChild(publicationNode);
+					nodeSelected.AddChild(new CollectionNode(publication));
+					this.DisplayNodePublications(nodeSelected);
 				}
 			}
 		}
@@ -400,28 +429,31 @@ namespace Kontiki.WF
 				return;
 			}
 
-			if (this._lbPublications.SelectedItem != null)
+			if (this._lvPublications.SelectedItems.Count != 1)
 			{
-				Publication publication = this._lbPublications.SelectedItem as Publication;
-
-				if (
-					MessageBox.Show($"Delete publication {publication} ?", 
-					"Publication to be deleted", 
-					MessageBoxButtons.OKCancel, 
-					MessageBoxIcon.Question
-				) == DialogResult.OK)
-				{
-					CollectionNode node = this._collection.FindPublicationNode(publication.Id);
-
-					CollectionNode parent = node.Parent;
-
-					node.Parent.RemoveChild(node);
-
-					this.DisplayNodePublications(parent);
-
-					this._txPublicationBibTeX.Clear();
-				}
+				return;
 			}
+
+			Publication publication = this._lvPublications.SelectedItems[0].Tag as Publication;
+
+			if (
+				MessageBox.Show($"Delete publication {publication} ?", 
+				"Publication to be deleted", 
+				MessageBoxButtons.OKCancel, 
+				MessageBoxIcon.Question
+			) == DialogResult.OK)
+			{
+				CollectionNode node = this._collection.FindPublicationNode(publication.Id);
+
+				CollectionNode parent = node.Parent;
+
+				node.Parent.RemoveChild(node);
+
+				this.DisplayNodePublications(parent);
+
+				this._txPublicationBibTeX.Clear();
+			}
+			
 		}
 
 		private void OnExportToClipboardAsBibTeX(object sender, System.EventArgs e)
@@ -431,23 +463,30 @@ namespace Kontiki.WF
 				return;
 			}
 
-			if (this._lbPublications.SelectedItem != null)
+			if (this._lvPublications.SelectedItems.Count != 1)
 			{
-				Publication publication = this._lbPublications.SelectedItem as Publication;
-
-				string bibTeX = publication.ToBibTeX();
-
-				Clipboard.SetText(bibTeX);
+				return;
 			}
+
+			Publication publication = this._lvPublications.SelectedItems[0].Tag as Publication;
+
+			string bibTeX = publication.ToBibTeX();
+
+			Clipboard.SetText(bibTeX);
 		}
 
 		private void OnPublicationsMouseDown(object sender, MouseEventArgs e)
 		{
-			Publication publication = this._lbPublications.SelectedItem as Publication;
+			if (this._lvPublications.SelectedItems.Count != 1)
+			{
+				return;
+			}
+
+			Publication publication = this._lvPublications.SelectedItems[0].Tag as Publication;
 
 			string bibTeX = publication.ToBibTeX();
 
-			this._lbPublications.DoDragDrop(bibTeX, DragDropEffects.Move);
+			this._lvPublications.DoDragDrop(bibTeX, DragDropEffects.Move);
 		}
 
 		private void OnPublicationsDragOver(object sender, DragEventArgs e)
