@@ -370,6 +370,23 @@ namespace Kontiki.WF
 			if (this._lbPublications.SelectedItem != null)
 			{
 				Publication publication = this._lbPublications.SelectedItem as Publication;
+
+				PublicationDialog dialog	= new PublicationDialog();
+				dialog.Publication			= publication;
+
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					publication	= dialog.Publication;
+					CollectionNode nodeSelected = this._tvCollection.SelectedNode.Tag as CollectionNode;
+					CollectionNode publicationNode = nodeSelected.Children.FirstOrDefault(c=>c.Publication.Id == publication.Id);
+
+					if (publicationNode != null)
+					{
+						nodeSelected.RemoveChild(publicationNode);
+						nodeSelected.AddChild(new CollectionNode(publication));
+						this.DisplayNodePublications(nodeSelected);
+					}
+				}
 			}
 		}
 
