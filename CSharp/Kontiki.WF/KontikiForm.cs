@@ -204,8 +204,10 @@ namespace Kontiki.WF
 				return null;
 			}
 
-			TreeNode tnFolder	= new TreeNode(node.FolderName);
-			tnFolder.Tag		= node;
+			TreeNode tnFolder			= new TreeNode(node.FolderName);
+			tnFolder.Tag				= node;
+			tnFolder.ImageKey			= "Folder";
+			tnFolder.SelectedImageKey	= "Folder";
 
 			foreach (CollectionNode child in node.Children)
 			{
