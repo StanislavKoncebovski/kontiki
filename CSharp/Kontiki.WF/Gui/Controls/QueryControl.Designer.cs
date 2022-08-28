@@ -121,11 +121,15 @@ namespace Kontiki.WF.Gui.Controls
 			// 
 			this._tlpQueryControl.SetColumnSpan(this._btAddSelected, 2);
 			this._btAddSelected.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._btAddSelected.Location = new System.Drawing.Point(163, 425);
+			this._btAddSelected.Image = global::Kontiki.WF.Properties.Resources.AddSelected_Dark;
+			this._btAddSelected.Location = new System.Drawing.Point(160, 422);
+			this._btAddSelected.Margin = new System.Windows.Forms.Padding(0);
 			this._btAddSelected.Name = "_btAddSelected";
-			this._btAddSelected.Size = new System.Drawing.Size(301, 34);
+			this._btAddSelected.Size = new System.Drawing.Size(307, 40);
 			this._btAddSelected.TabIndex = 8;
 			this._btAddSelected.Text = "&Add Selected";
+			this._btAddSelected.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this._btAddSelected.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this._btAddSelected.UseVisualStyleBackColor = true;
 			this._btAddSelected.Click += new System.EventHandler(this.OnAddSelectedPublications);
 			// 
@@ -133,12 +137,16 @@ namespace Kontiki.WF.Gui.Controls
 			// 
 			this._btCancel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._btCancel.Enabled = false;
-			this._btCancel.Location = new System.Drawing.Point(316, 131);
+			this._btCancel.Image = global::Kontiki.WF.Properties.Resources.QueryStop_Dark;
+			this._btCancel.Location = new System.Drawing.Point(313, 128);
+			this._btCancel.Margin = new System.Windows.Forms.Padding(0);
 			this._btCancel.MinimumSize = new System.Drawing.Size(0, 32);
 			this._btCancel.Name = "_btCancel";
-			this._btCancel.Size = new System.Drawing.Size(148, 34);
+			this._btCancel.Size = new System.Drawing.Size(154, 40);
 			this._btCancel.TabIndex = 5;
 			this._btCancel.Text = "&Cancel";
+			this._btCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this._btCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this._btCancel.UseVisualStyleBackColor = true;
 			// 
 			// label3
@@ -180,12 +188,16 @@ namespace Kontiki.WF.Gui.Controls
 			// _btStartQuery
 			// 
 			this._btStartQuery.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._btStartQuery.Location = new System.Drawing.Point(163, 131);
+			this._btStartQuery.Image = global::Kontiki.WF.Properties.Resources.QueryStart_Dark;
+			this._btStartQuery.Location = new System.Drawing.Point(160, 128);
+			this._btStartQuery.Margin = new System.Windows.Forms.Padding(0);
 			this._btStartQuery.MinimumSize = new System.Drawing.Size(0, 32);
 			this._btStartQuery.Name = "_btStartQuery";
-			this._btStartQuery.Size = new System.Drawing.Size(147, 34);
+			this._btStartQuery.Size = new System.Drawing.Size(153, 40);
 			this._btStartQuery.TabIndex = 4;
 			this._btStartQuery.Text = "&Start";
+			this._btStartQuery.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this._btStartQuery.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this._btStartQuery.UseVisualStyleBackColor = true;
 			this._btStartQuery.Click += new System.EventHandler(this.OnStartQuery);
 			// 

@@ -137,5 +137,47 @@
   <ItemGroup>
     <None Include="Resources\CollectionSave.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionLoad_Dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionLoad_Light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionNew_Dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionNew_Light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionSave_Dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionSave_Light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\QueryStart_Dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\QueryStart_Light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\QueryStop_Dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\QueryStop_Light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Quit_Dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Quit_Light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddSelected_Dark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddSelected_Light.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
