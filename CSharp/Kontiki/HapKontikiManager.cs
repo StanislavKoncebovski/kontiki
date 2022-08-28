@@ -290,7 +290,13 @@ namespace Kontiki
 		{
 			List<Publication> publications = new List<Publication>();
 
-			HtmlNode[] tables			= doc.DocumentNode.SelectNodes("//table").ToArray();
+			HtmlNodeCollection nodes	= doc.DocumentNode.SelectNodes("//table");
+			if (nodes == null)
+			{
+				return null;
+			}
+
+			HtmlNode[] tables			= nodes.ToArray();	
 			HtmlNode table				= tables[2];
 
 			HtmlNodeCollection tableRows = table.SelectNodes("tr");

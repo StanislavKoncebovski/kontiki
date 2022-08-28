@@ -46,11 +46,22 @@ namespace Kontiki.WF.Gui.Controls
 				return;
 			}
 
+			if (this._txTokens.Text.Length < 2)
+			{
+				MessageBox.Show("No valid query token", "Cannot carry out query", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+				return;
+			}
+
 			if (this._cxPublicationType.SelectedItem.ToString() == "Book")
 			{
 				this.Cursor = Cursors.WaitCursor;
 
 				List<Publication> books = KontikiForm.KontikiManager.QueryBooks(this._txTokens.Text, (QueryColumn)this._cxQueryParameters.SelectedItem);
+
+				if (books == null)
+				{
+					return;
+				}
 
 				this._clbQueryResults.Items.Clear();
 

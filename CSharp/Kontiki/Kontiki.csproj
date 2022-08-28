@@ -38,6 +38,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +65,7 @@
     <Compile Include="PublicationType.cs.cs" />
     <Compile Include="QueryColumn.cs" />
     <Compile Include="ReturnFormat.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Tools\StringExtensions.cs" />
     <Compile Include="Tools\Xml\XmlTools.AttributeValues.cs" />
     <Compile Include="Tools\Xml\XmlTools.cs" />

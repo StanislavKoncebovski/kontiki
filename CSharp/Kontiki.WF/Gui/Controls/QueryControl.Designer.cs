@@ -134,6 +134,7 @@ namespace Kontiki.WF.Gui.Controls
 			this._btCancel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._btCancel.Enabled = false;
 			this._btCancel.Location = new System.Drawing.Point(316, 131);
+			this._btCancel.MinimumSize = new System.Drawing.Size(0, 32);
 			this._btCancel.Name = "_btCancel";
 			this._btCancel.Size = new System.Drawing.Size(148, 34);
 			this._btCancel.TabIndex = 5;
@@ -180,6 +181,7 @@ namespace Kontiki.WF.Gui.Controls
 			// 
 			this._btStartQuery.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._btStartQuery.Location = new System.Drawing.Point(163, 131);
+			this._btStartQuery.MinimumSize = new System.Drawing.Size(0, 32);
 			this._btStartQuery.Name = "_btStartQuery";
 			this._btStartQuery.Size = new System.Drawing.Size(147, 34);
 			this._btStartQuery.TabIndex = 4;
@@ -192,8 +194,9 @@ namespace Kontiki.WF.Gui.Controls
 			this._tlpQueryControl.SetColumnSpan(this._pgQuery, 2);
 			this._pgQuery.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._pgQuery.Location = new System.Drawing.Point(163, 171);
+			this._pgQuery.MinimumSize = new System.Drawing.Size(0, 32);
 			this._pgQuery.Name = "_pgQuery";
-			this._pgQuery.Size = new System.Drawing.Size(301, 26);
+			this._pgQuery.Size = new System.Drawing.Size(301, 32);
 			this._pgQuery.TabIndex = 6;
 			// 
 			// _cxSource
@@ -223,10 +226,10 @@ namespace Kontiki.WF.Gui.Controls
 			this._tlpQueryControl.SetColumnSpan(this._clbQueryResults, 3);
 			this._clbQueryResults.Dock = System.Windows.Forms.DockStyle.Fill;
 			this._clbQueryResults.Font = new System.Drawing.Font("Arial", 9F);
-			this._clbQueryResults.Location = new System.Drawing.Point(0, 200);
-			this._clbQueryResults.Margin = new System.Windows.Forms.Padding(0);
+			this._clbQueryResults.Location = new System.Drawing.Point(0, 208);
+			this._clbQueryResults.Margin = new System.Windows.Forms.Padding(0, 8, 0, 0);
 			this._clbQueryResults.Name = "_clbQueryResults";
-			this._clbQueryResults.Size = new System.Drawing.Size(467, 222);
+			this._clbQueryResults.Size = new System.Drawing.Size(467, 214);
 			this._clbQueryResults.TabIndex = 7;
 			// 
 			// QueryControl

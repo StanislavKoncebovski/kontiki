@@ -71,6 +71,8 @@ namespace Kontiki.WF
 			this._tpPublicationBibTeX = new System.Windows.Forms.TabPage();
 			this._txPublicationBibTeX = new System.Windows.Forms.TextBox();
 			this._tpPublicationInstance = new System.Windows.Forms.TabPage();
+			this._ctrlPublication = new Kontiki.WF.Gui.Controls.PublicationControl();
+			this._ctrlQuery = new Kontiki.WF.Gui.Controls.QueryControl();
 			this._cmsPublication = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.addPublicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.editPublicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,8 +80,6 @@ namespace Kontiki.WF
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.exportToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.bibTeXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this._ctrlPublication = new Kontiki.WF.Gui.Controls.PublicationControl();
-			this._ctrlQuery = new Kontiki.WF.Gui.Controls.QueryControl();
 			this._msKontiki.SuspendLayout();
 			this._tsKontiki.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._scCollection)).BeginInit();
@@ -280,11 +280,13 @@ namespace Kontiki.WF
 			// 
 			// toolStripButton4
 			// 
+			this.toolStripButton4.AutoSize = false;
 			this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.toolStripButton4.Image = global::Kontiki.WF.Properties.Resources.Settings;
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton4.Margin = new System.Windows.Forms.Padding(0);
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(42, 37);
+			this.toolStripButton4.Size = new System.Drawing.Size(40, 40);
 			this.toolStripButton4.Text = "toolStripButton4";
 			// 
 			// toolStripButton5
@@ -487,13 +489,34 @@ namespace Kontiki.WF
 			// _tpPublicationInstance
 			// 
 			this._tpPublicationInstance.Controls.Add(this._ctrlPublication);
-			this._tpPublicationInstance.Location = new System.Drawing.Point(4, 24);
+			this._tpPublicationInstance.Location = new System.Drawing.Point(4, 22);
 			this._tpPublicationInstance.Name = "_tpPublicationInstance";
 			this._tpPublicationInstance.Padding = new System.Windows.Forms.Padding(3);
-			this._tpPublicationInstance.Size = new System.Drawing.Size(522, 230);
+			this._tpPublicationInstance.Size = new System.Drawing.Size(522, 232);
 			this._tpPublicationInstance.TabIndex = 1;
 			this._tpPublicationInstance.Text = "All";
 			this._tpPublicationInstance.UseVisualStyleBackColor = true;
+			// 
+			// _ctrlPublication
+			// 
+			this._ctrlPublication.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._ctrlPublication.Font = new System.Drawing.Font("Consolas", 10F);
+			this._ctrlPublication.Location = new System.Drawing.Point(3, 3);
+			this._ctrlPublication.Margin = new System.Windows.Forms.Padding(0);
+			this._ctrlPublication.Name = "_ctrlPublication";
+			this._ctrlPublication.Publication = null;
+			this._ctrlPublication.Size = new System.Drawing.Size(516, 226);
+			this._ctrlPublication.TabIndex = 0;
+			// 
+			// _ctrlQuery
+			// 
+			this._ctrlQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+			this._ctrlQuery.Font = new System.Drawing.Font("Consolas", 10F);
+			this._ctrlQuery.Location = new System.Drawing.Point(0, 0);
+			this._ctrlQuery.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this._ctrlQuery.Name = "_ctrlQuery";
+			this._ctrlQuery.Size = new System.Drawing.Size(463, 550);
+			this._ctrlQuery.TabIndex = 0;
 			// 
 			// _cmsPublication
 			// 
@@ -548,27 +571,6 @@ namespace Kontiki.WF
 			this.bibTeXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.bibTeXToolStripMenuItem.Text = "BibTeX";
 			this.bibTeXToolStripMenuItem.Click += new System.EventHandler(this.OnExportToClipboardAsBibTeX);
-			// 
-			// _ctrlPublication
-			// 
-			this._ctrlPublication.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._ctrlPublication.Font = new System.Drawing.Font("Consolas", 10F);
-			this._ctrlPublication.Location = new System.Drawing.Point(3, 3);
-			this._ctrlPublication.Margin = new System.Windows.Forms.Padding(0);
-			this._ctrlPublication.Name = "_ctrlPublication";
-			this._ctrlPublication.Publication = null;
-			this._ctrlPublication.Size = new System.Drawing.Size(516, 226);
-			this._ctrlPublication.TabIndex = 0;
-			// 
-			// _ctrlQuery
-			// 
-			this._ctrlQuery.Dock = System.Windows.Forms.DockStyle.Fill;
-			this._ctrlQuery.Font = new System.Drawing.Font("Consolas", 10F);
-			this._ctrlQuery.Location = new System.Drawing.Point(0, 0);
-			this._ctrlQuery.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this._ctrlQuery.Name = "_ctrlQuery";
-			this._ctrlQuery.Size = new System.Drawing.Size(463, 550);
-			this._ctrlQuery.TabIndex = 0;
 			// 
 			// KontikiForm
 			// 

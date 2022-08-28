@@ -47,9 +47,9 @@ namespace Kontiki
 			this.ConnectionTime	= connectionTime;
 		}
 
-		public KontikiConnection(string name, string url) : this(name, url, false, -1)																		{}
-		public KontikiConnection()								: this("", "")																				{}
-		public KontikiConnection(KontikiConnection connection)		: this(connection.Name, connection.Url, connection.IsOnline, connection.ConnectionTime)	{}
+		public KontikiConnection(string name, string url)		: this(name, url, false, -1)															{}
+		public KontikiConnection()								: this("", "")																			{}
+		public KontikiConnection(KontikiConnection connection)	: this(connection.Name, connection.Url, connection.IsOnline, connection.ConnectionTime)	{}
 		#endregion
 
 		#region XML

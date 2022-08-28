@@ -22,9 +22,9 @@ namespace Kontiki.WF
 	public partial class KontikiForm : Form
 	{
 		#region Private Members
-		private static string _connectionFileName		= "kontiki_connections.xml";
-		private KontikiCollection	_collection			= null;
-		private string				_collectionFileName = null;
+		private static string		_connectionFileName		= "kontiki_connections.xml";
+		private KontikiCollection	_collection				= null;
+		private string				_collectionFileName		= null;
 		#endregion
 
 		#region Inernal members
