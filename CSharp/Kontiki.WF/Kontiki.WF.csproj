@@ -123,21 +123,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Quit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Settings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CollectionLoad.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CollectionNew.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CollectionSave.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\CollectionLoad_Dark.png" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +163,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AddSelected_Light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Quit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionLoad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionNew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CollectionSave.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
