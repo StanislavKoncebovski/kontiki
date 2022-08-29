@@ -50,6 +50,7 @@
     <Compile Include="Collection\CollectionNode.cs" />
     <Compile Include="Collection\KontikiCollection.cs" />
     <Compile Include="HapKontikiManager.cs" />
+    <Compile Include="IContikiConnection.cs" />
     <Compile Include="IKontikiManager.cs" />
     <Compile Include="IKontikiConnectionManager.cs" />
     <Compile Include="KontikiConnection.cs" />
